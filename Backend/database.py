@@ -1,10 +1,12 @@
 import mysql.connector
+from mysql.connector import Error
 from config.config import DATABASE_CONFIG
 
-
-# Creacion de la canoexion
-
-
 def get_db_connection():
-    conn = mysql.connector.connect(**DATABASE_CONFIG)
-    return conn
+    try:
+        conn = mysql.connector.connect(**DATABASE_CONFIG)
+        if conn.is_connected():
+            return conn
+    except Error as e:
+        print(f"Error al conectar a la base de datos: {e}")
+        return None

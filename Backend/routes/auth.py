@@ -8,7 +8,7 @@ def Login():
     # Verificación de credenciales
     data = request.get_json()
     user = data.get("usuario")
-    password = data.get("contraseña")
+    password = data.get("password")
 
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
