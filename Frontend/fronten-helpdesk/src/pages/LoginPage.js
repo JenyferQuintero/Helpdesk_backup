@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import Imagen from "../imagenes/logo proyecto color.jpeg";
 import { useNavigate } from "react-router-dom";
+import "../styles/LoginPage.css";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ const Login = () => {
   };
 
   return (
-    <div className="container">
+    <div className="contLogin">
       <header>
         <img src={Imagen} alt="Logo" className="empresarial" />
         <h1>BIENVENIDOS A HELP DESK JCDB</h1>
