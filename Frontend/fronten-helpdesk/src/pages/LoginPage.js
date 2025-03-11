@@ -21,7 +21,7 @@ const Login = () => {
         password,  // Cambio clave para evitar problemas con la ñ
       });
       if (response.status === 200) {
-        navigate("/dashboard");  // Redirige al Dashboard
+        navigate("/home");  // Redirige al Dashboard
       }
       setMessage(response.data.mensaje); // El backend envía 'mensaje', no 'message'
     } catch (error) {

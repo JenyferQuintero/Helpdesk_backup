@@ -15,7 +15,7 @@ def Login():
 
     try:
         cursor.execute(
-            "SELECT * FROM usuarios WHERE usuario = %s AND contraseña = %s", (user, password)
+            "SELECT * FROM usuarios WHERE nombre_usuario = %s AND contraseña = %s", (user, password)
         )
 
         # Usar fetchall() para obtener todos los resultados de una vez
