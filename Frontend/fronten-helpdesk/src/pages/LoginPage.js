@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import Imagen from "../imagenes/logo proyecto color.jpeg";
 import { useNavigate } from "react-router-dom";
+import { FaUser, FaEnvelope, FaPhone } from 'react-icons/fa'; // Importa los iconos que necesites
 import "../styles/LoginPage.css";
 
 const Login = () => {
@@ -44,7 +45,7 @@ const Login = () => {
       <div className="row">
         <form className="login-form" onSubmit={handleSubmit}>
           <div className="form-group">
-            <i className="bx bx-user"></i>
+         
             <input
               type="text"
               placeholder="USUARIO"

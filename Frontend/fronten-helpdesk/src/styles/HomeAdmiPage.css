@@ -1,0 +1,312 @@
+.container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 120px;
+  background-color: rgba(82, 122, 242, 0.5);
+  border-radius: 15px;
+  box-shadow: 15px 15px 15px rgba(15, 12, 207, 0.3);
+  margin-top: 180px;
+
+}
+
+.encabezado {
+  background-color: #023e8a;
+  display: flex;
+}
+
+.proyecto {
+  width: 60px;
+  margin-right: 800px;
+}
+
+.icon-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;   /* Espacio entre los iconos */
+
+}
+
+.icon {
+  margin-right: 20px;
+  color: #0c0c0c;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.input-container {
+  position: relative;
+  width: fit-content;
+  margin-right: 5px;
+}
+
+.search {
+  padding-left: 20px;   /* Ajusta el padding para el ícono */
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  height: 25px;
+  width: 200px;
+  border-radius: 15px;
+}
+
+.search-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
+  pointer-events: none;   /* Evita que el ícono interfiera con el input */
+}
+
+.username {
+  color: #ddd;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  margin-right: 20px;  /* Espacio entre el nombre de usuario y el icono */
+}
+
+/* Estilos para el menú principal */
+.menu {
+  margin-top:0;
+}
+
+.menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background-color: rgba(69, 81, 216, 0.5);
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+
+}
+
+.menu ul li a {
+  text-decoration: none;
+  color: rgb(12, 12, 12);
+  font-size: 24px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-weight: bold;
+
+}
+
+.menu ul li:hover {
+  background-color: #48cae4;
+}
+
+/* Estilos para el menú de inicio */
+.inicio {
+  margin-top:0;
+
+}
+
+.inicio ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background-color: rgba(217, 238, 245, 0.5);
+ 
+}
+
+/*boton de inicio*/
+.inicio ul li a {
+  text-decoration: none; /* Quita el subrayado del enlace */
+  color: rgb(12, 12, 12); /* Color del texto */
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-weight: bold;
+  padding: 8px 16px; /* Espaciado interno para el botón */
+  background-color: #ddd; /* Color de fondo del botón */
+  border-radius: 4px; /* Bordes redondeados */
+  transition: background-color 0.3s ease; /* Transición suave */
+}
+
+.inicio ul li a:hover {
+  background-color: #ccc; /* Cambia el color al pasar el mouse */
+}
+
+main {
+  padding: 20px;
+}
+
+/* Estilos para el grupo de botones */
+.button-group {
+  display: flex;
+  position: absolute;
+  left: 80px;
+  margin: 40px 0; /* Espacio entre el header y el container */
+  width: 900px;
+}
+
+/* Estilos para los botones */
+.button {
+  padding: 10px 20px; /* Espaciado interno */
+  background-color: #e1f0fd; /* Color de fondo */
+  color: rgb(15, 14, 14); /* Color del texto */
+  border: none; /* Sin bordes */
+  border-radius: 5px; /* Bordes redondeados */
+  cursor: pointer; /* Cambia el cursor al pasar el mouse */
+  font-size: 20px; /* Tamaño del texto */
+  font-weight: bold;
+  width: 300px;
+}
+
+/* Cambia el color de fondo al pasar el mouse */
+.button:hover {
+  background-color: #3e7dc0;
+}
+
+.content {
+  background-color: rgba(173, 216, 230, 0.5); /* Azul claro con transparencia */
+  padding: 10px; /* Espaciado interno */
+  border-radius: 8px; /* Bordes redondeados */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  max-width: 800px; /* Ancho máximo del contenedor */
+  margin: 0px auto; /* Centrar el contenedor */
+  margin-bottom: 20px;
+  
+
+}
+
+/* Estilos para el título */
+.content h3 {
+  margin-top: 0; /* Elimina el margen superior por defecto */
+  color: #333; /* Color del texto */
+}
+
+/* Estilos para la tabla */
+.content table {
+  width: 100%; /* Ocupa todo el ancho del contenedor */
+  border-collapse: collapse; /* Elimina el espacio entre celdas */
+  margin-top: 10px; /* Espacio entre el título y la tabla */
+}
+
+.content th,
+.content td {
+  padding: 10px; /* Espaciado interno de las celdas */
+  text-align: center; /* Alinea el texto a la izquierda */
+  background-color: transparent; /* Azul claro con transparencia */
+  border: none; /* Sin bordes */
+  color:#0c0c0c
+}
+
+.content th {
+  font-weight: bold; /* Texto en negrita */
+  
+}
+
+/*tabla de datos*/
+
+.cerrar{
+  padding: 0px; /* Espaciado interno */
+  border-radius: 8px; /* Bordes redondeados */
+  max-width: 800px; /* Ancho máximo del contenedor */
+  margin: 8px auto; /* Centrar el contenedor */
+  margin-bottom: 20px;
+}
+.cerrar table {
+  background-color: rgba(217, 238, 245, 0.5); /* Azul claro con transparencia */
+  width: 100%; /* Ocupa todo el ancho del contenedor */
+  border-collapse: collapse; /* Elimina el espacio entre celdas */
+ 
+
+}
+
+.cerrar th,
+.cerrar td {
+  padding: 10px; /* Espaciado interno de las celdas */
+  text-align: center; /* Alinea el texto a la izquierda */
+ 
+}
+
+.cerrar table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.cerrar table th {
+  color: rgb(6, 5, 5);
+}
+
+
+/* Estilos para el chatbot */
+.chatbot-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000; /* Asegura que esté por encima de otros elementos */
+}
+
+.chatbot-icon {
+  width: 100px;
+  height: 100px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  opacity: 10px;
+}
+
+.chatbot-icon:hover {
+  transform: scale(1.1); /* Efecto de escala al pasar el mouse */
+}
+
+/* Estilos para la ventana del chat */
+.chat-window {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  width: 300px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.chat-header {
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-header h4 {
+  margin: 0;
+}
+
+.close-chat {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.chat-body {
+  padding: 10px;
+  max-height: 200px;
+  overflow-y: auto; /* Agrega scroll si el contenido es largo */
+}
+
+.chat-input {
+  display: flex;
+  padding: 10px;
+  border-top: 1px solid #ccc;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.chat-input button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
