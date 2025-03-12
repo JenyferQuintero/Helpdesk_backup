@@ -7,7 +7,7 @@ import { FaMagnifyingGlass } from "react-icons/fa6";
 import "../styles/HomeAdmiPage.css";
 import ChatbotIcon from "../imagenes/img chatbot.png";
 
-const HomeAdmiPage = () => {
+function HomeAdmiPage () {
   // Estado para controlar la visibilidad del chat
   const [isChatOpen, setIsChatOpen] = useState(false);
 
