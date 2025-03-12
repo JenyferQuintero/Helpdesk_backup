@@ -23,7 +23,22 @@ const Login = () => {
         password,  // Cambio clave para evitar problemas con la ñ
       });
       if (response.status === 200) {
-        navigate("/home");  // Redirige al Dashboard
+        const { usuario, rol } = response.data;
+        localStorage.setItem("usuario", usuario);
+        localStorage.setItem("rol", rol);
+        console.log(rol);
+
+        if (rol === "usuario") {
+          navigate("/home");
+        }
+        else if (rol === "administrador"){
+        navigate("/HomeAdmiPage");
+      }
+      else {
+        alert("Sin rol para ingresar")
+        window.location.reload()
+      }
+        // Redirige al Dashboard
       }
       setMessage(response.data.mensaje); // El backend envía 'mensaje', no 'message'
     } catch (error) {
@@ -45,7 +60,7 @@ const Login = () => {
       <div className="row">
         <form className="login-form" onSubmit={handleSubmit}>
           <div className="form-group">
-         
+
             <input
               type="text"
               placeholder="USUARIO"

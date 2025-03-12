@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from database import get_db_connection
 
-auth_bp = Blueprint("auth", __name__)
+auth_bp = Blueprint("auth", __name__ )
 
 @auth_bp.route("/login", methods=["POST"])
 def Login():
@@ -10,22 +10,31 @@ def Login():
     user = data.get("usuario")
     password = data.get("password")
 
+    if not user or not password:
+        return jsonify({"error": "Faltan credenciales"}), 400
+
     conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor()
 
     try:
         cursor.execute(
-            "SELECT * FROM usuarios WHERE nombre_usuario = %s AND contraseña = %s", (user, password)
+            "SELECT nombre_usuario, rol FROM usuarios WHERE nombre_usuario = %s AND contraseña = %s",
+            (user, password)
         )
 
-        # Usar fetchall() para obtener todos los resultados de una vez
-        usuarios = cursor.fetchall()
-
-        if usuarios:
-            return jsonify({"mensaje": "Inicio de sesión exitoso"}), 200
-        
+        usuario = cursor.fetchone()  # Puede ser None
+        print(usuario)
+        if usuario:
+            return jsonify({
+                "mensaje": "Inicio de sesión exitoso",
+                "usuario": usuario[0],
+                "rol": list(usuario[1])[0]
+            }), 200
 
         return jsonify({"error": "Credenciales inválidas"}), 401
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500  # Captura errores inesperados
 
     finally:
         cursor.close()
