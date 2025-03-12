@@ -135,6 +135,24 @@ nav ul li {
   padding: 20px;
 }
   
+.titulo-container {
+  display: flex;
+  align-items: center;  /* Alinea verticalmente */
+  justify-content: center; /* Centra horizontalmente */
+  gap: 10px;  /* Espacio entre el texto y el icono */
+  border: 2px solid #023e8a;  /* Borde alrededor */
+  padding: 6px; /* Espaciado interno */
+  border-radius: 8px; /* Bordes redondeados */
+  width: 97%; /* Ajusta el tamaño al contenido */
+  margin: 0 auto; /* Centra el contenedor */
+}
+
+.circulo {  
+  font-size: 24px;  /* Tamaño del icono */
+  color: #023e8a;  /* Color del icono */
+}
+
+
   .content h2 {
     font-size: 20px;
     margin-bottom: 20px;
@@ -144,7 +162,9 @@ nav ul li {
     width: 100%;
     border-collapse: collapse;
   }
-  
+  .incidencia {
+    background-color:rgba(7, 5, 14, 0.5);
+  }
   table th, table td {
     padding: 10px;
     border: 1px solid #ddd;
@@ -156,13 +176,13 @@ nav ul li {
   }
 
   table tr:nth-child(even) {
-    background-color: #cce5ff; /* Azul claro */
+    background-color:rgba(217, 238, 245, 0.5);/* Azul claro */
   }
   
   table tr:nth-child(odd) {
-    background-color: #99ccff; /* Azul oscuro */
+    background-color: rgba(113, 150, 228, 0.5);; /* Azul oscuro */
   }
-  
+
   /* Estilos para el chatbot */
 .chatbot-container {
   position: fixed;
