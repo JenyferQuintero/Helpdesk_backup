@@ -1,85 +1,120 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";  // Para navegación si usas react-router
 import Imag from "../imagenes/logo proyecto color.jpeg";
-import { FaPowerOff } from "react-icons/fa6";
+import { Link } from "react-router-dom";
+import { FaDisplay, FaPowerOff } from "react-icons/fa6";
 import { PiGearSixFill } from "react-icons/pi";
 import { FaMagnifyingGlass } from "react-icons/fa6";
-import "../styles/HomePage.css";  // Usamos un archivo CSS específico para esta página
+import { FaHouseMedicalCircleCheck, FaInfoCircle, FaExclamationTriangle } from "react-icons/fa";
+import "../styles/HomePage.css";
 import ChatbotIcon from "../imagenes/img chatbot.png";
-import { FiPlusCircle } from "react-icons/fi";
 
-
-function HomePage() {
+const HomePage = () => {
   // Estado para controlar la visibilidad del chat
   const [isChatOpen, setIsChatOpen] = useState(false);
+
+  // Estado para controlar la vista activa
+  const [activeView, setActiveView] = useState("personal"); // "personal", "global" o "todo"
 
   // Función para abrir/cerrar el chat
   const toggleChat = () => {
     setIsChatOpen(!isChatOpen);
   };
 
+
+
+  // Datos de tickets
+  const tickets = [
+    { label: "Nuevo", color: "green", icon: "🟢", count: 0 },
+    { label: "En curso (asignada)", color: "lightgreen", icon: "⭕", count: 0 },
+    { label: "En curso (planificada)", color: "#4169E1", icon: "📅", count: 0 },
+    { label: "En espera", color: "orange", icon: "🟡", count: 0 },
+    { label: "Resueltas", color: "gray", icon: "⚪", count: 0 },
+    { label: "Cerrado", color: "black", icon: "⚫", count: 0 },
+    { label: "Borrado", color: "red", icon: "🗑", count: 0 },
+  ];
+
+
+
   return (
-    <div className="home-page">
+    <div>
       {/* Encabezado */}
-      <header className="encabezado">
-        <img src={Imag} alt="Logo" className="proyecto" />
-        <div className="input-container">
-          <input type="text" placeholder="Buscar" className="search" />
-          <FaMagnifyingGlass className="search-icon" />
+      <header className="container-inicio">
+        {/* Botón de Inicio */}
+        <div className="container-inicio-img">
+          <li className="inicio">
+            <Link to="/home" className="link-sin-subrayado">Inicio</Link>
+          </li>
         </div>
-        <PiGearSixFill className="icon" />
-        <span className="username">Nombre de Usuario</span>
-        <div className="icon-container">
-          <Link to="/">
-            <FaPowerOff className="icon" />
-          </Link>
+
+        {/* Contenedor para el input, nombre de usuario y el ícono */}
+        <div className="input-container">
+          {/* Input de búsqueda */}
+          <div className="search-container">
+            <input
+              type="text"
+              placeholder="Buscar"
+              className="search"
+            />
+            <button
+              type="submit"
+              className="button-buscar"
+              title="Buscar"
+            >
+              <FaMagnifyingGlass className="search-icon" />
+            </button>
+          </div>
+
+          {/* Nombre de usuario y ícono de cerrar sesión */}
+          <div className="user-container">
+            <span className="username">Bienvenido, <span id="nombreusuario"></span></span>
+            <div className="icon-container">
+              <Link to="/">
+                <FaPowerOff className="icon" />
+              </Link>
+            </div>
+          </div>
         </div>
       </header>
+      <div className="container">
 
-      {/* Navegación */}
-      <nav>
-        <ul>
-          <li><Link to="/">Inicio</Link></li>
-          <li><Link to="/create-incident">Crear Incidencia</Link></li>
-          <li><Link to="/dashboard">Incidencias</Link></li>
-        </ul>
-      </nav>
-
-      <nav className="inicio">
-        <ul>
-          <li>
-            <Link to="/">Inicio</Link>
-          </li>
-        </ul>
-      </nav>
-
-
-      {/* Contenido principal */}
-      <main>
-        <div className="content">
-          <div className="titulo-container">
-            <h2>Creación de Ticket</h2>
-            <Link to="/create-incident" className="icon-link">
-              <FiPlusCircle className="circulo" />
-            </Link>
+        {/* Contenedor de Tickets */}
+        <div className="section-container">
+          <h2>Tickets</h2>
+          <div className="cards-container">
+            {tickets.map((ticket, index) => (
+              <div key={index} className="card" style={{ borderColor: ticket.color }}>
+                <span className="icon">{ticket.icon}</span>
+                <span className="label">{ticket.label}</span>
+                <span className="count">{ticket.count}</span>
+              </div>
+            ))}
           </div>
+        </div>
+
+        {/* Tabla de encuesta de satisfacción */}
+        <div className="tabla-container">
+          <h2>ENCUESTA DE SATISFACCIÓN</h2>
           <table>
-            <thead className="incidencia">
+            <thead>
               <tr>
-                <th>Incidencias</th>
-                <th>Número</th>
+                <th>ID</th>
+                <th>SOLICITANTE</th>
+                <th>ELEMENTOS ASOCIADOS</th>
+                <th>DESCRIPCIÓN</th>
               </tr>
             </thead>
             <tbody>
-              <tr><td>Nuevo</td><td>0</td></tr>
-              <tr><td>En curso</td><td>0</td></tr>
-              <tr><td>En espera</td><td>0</td></tr>
-              <tr><td>Resueltas</td><td>0</td></tr>
-              <tr><td>Cerrado</td><td>0</td></tr>
+              <tr>
+                <td>ID: 2503150021</td>
+                <td>Julian Antonio Niño Oedoy</td>
+                <td>General</td>
+                <td>ALTA MEDICA (1 - 0)</td>
+              </tr>
             </tbody>
           </table>
         </div>
-      </main>
+      </div>
+
 
       {/* Chatbot */}
       <div className="chatbot-container">
@@ -110,7 +145,8 @@ function HomePage() {
           </div>
         )}
       </div>
-    </div>
+    </div >
   );
 };
+
 export default HomePage;

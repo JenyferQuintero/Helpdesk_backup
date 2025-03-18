@@ -1,6 +1,3 @@
--- Active: 1741664023628@@127.0.0.1@3306@help_desk_jcbd
-
-
 -- phpMyAdmin SQL Dump
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
@@ -21,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `jcbd`
+-- Base de datos: `help_desk_jcbd`
 --
 
 -- --------------------------------------------------------

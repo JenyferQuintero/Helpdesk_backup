@@ -1,194 +1,302 @@
-/* Estilos específicos para la HomePage */
-
-.home-page {
-    font-family: Arial, sans-serif;
-  }
-  
-  .encabezado {
-    background-color: #023e8a;
-    display: flex;
-  }
-  
-  .proyecto {
-    width: 60px;
-    margin-right: 800px;
-  }
-  
-  .icon-container {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;   /* Espacio entre los iconos */
-  
-  }
-  
-  .icon {
-    margin-right: 20px;
-    color: #0c0c0c;
-    font-size: 30px;
-    font-weight: bold;
-  }
-  
-  .input-container {
-    position: relative;
-    width: fit-content;
-    margin-right: 5px;
-  }
-  
-  .search {
- padding-left: 20px;   /* Ajusta el padding para el ícono */
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  height: 25px;
-  width: 200px;
+.container {
+  width: 88%;
+  height: 100%;
+  margin: 0 auto;
+  padding: 80px;
+  background-color: rgb(224, 224, 241);
   border-radius: 15px;
+  box-shadow: 15px 15px 15px rgba(15, 12, 207, 0.3);
+  margin-top: 9px;
+ }
 
-  }
-  
-  .search-icon {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #999;
-    pointer-events: none;   /* Evita que el ícono interfiera con el input */
-  }
-  .username {
-    color: #ddd;
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    margin-right: 20px;  /* Espacio entre el nombre de usuario y el icono */
-  }
 
-  .nav {
-    margin-top:0;
-  }
-  
-  nav ul {
- list-style: none;
-  padding: 0;
-  margin: 0;
-  background-color: rgba(69, 81, 216, 0.5);
-  justify-content: center;
+/* Estilos generales para el encabezado */
+.container-inicio {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  text-align: center;
-  }
-  
-  nav ul li {
-    display: inline-block;
-    padding: 10px 20px;
-  }
-  
-  nav ul li a {
-    text-decoration: none;
-  color: rgb(12, 12, 12);
-  font-size: 20px;
-  font-family: Georgia, 'Times New Roman', Times, serif;
-  font-weight: bold;
-  }
-  
-  nav ul li:hover {
-    background-color: #48cae4;
-  }
-  
- /* Estilos para el menú de inicio */
-.inicio {
-  margin-top:0;
-
+  padding: 10px;
+  background-color: #3a0ca3;
+  border-bottom: 1px solid #ccc;
 }
 
-.inicio ul {
+/* Estilos para el botón de Inicio */
+.container-inicio-img {
+  display: flex;
+  align-items: center;
+}
+
+.inicio {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.link-sin-subrayado {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 4px;
+  background-color: #e9ecef;
+  transition: background-color 0.3s ease;
+}
+
+.link-sin-subrayado:hover {
+  background-color: #afa5f8;
+}
+
+/* Estilos para el contenedor del input y elementos a la derecha */
+.input-container {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Estilos para el input de búsqueda */
+.search-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.search {
+  padding: 10px;
+  padding-right: 40px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.button-buscar {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.search-icon {
+  font-size: 18px;
+  color: #333;
+}
+
+/* Estilos para el nombre de usuario y el ícono */
+.user-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.username {
+  font-size: 16px;
+  color: #f5f2f2;
+}
+
+.icon-container {
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  font-size: 20px;
+  color: #333;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.icon:hover {
+  color: #ff0000;
+}
+
+/* Estilos generales */
+.flex-column-horizontal {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Estilos para la lista <ul> */
+.nav-tabla-vistas {
+  display: flex;
   list-style: none;
   padding: 0;
   margin: 0;
-  background-color: rgba(217, 238, 245, 0.5);
- 
+  gap: 10px;
 }
 
-/*boton de inicio*/
-.inicio ul li a {
-  text-decoration: none; /* Quita el subrayado del enlace */
-  color: rgb(12, 12, 12); /* Color del texto */
-  font-family: Georgia, 'Times New Roman', Times, serif;
-  font-weight: bold;
-  padding: 8px 16px; /* Espaciado interno para el botón */
-  background-color: #ddd; /* Color de fondo del botón */
-  border-radius: 4px; /* Bordes redondeados */
-  transition: background-color 0.3s ease; /* Transición suave */
+.nav-item {
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
-.inicio ul li a:hover {
-  background-color: #ccc; /* Cambia el color al pasar el mouse */
+.nav-item a {
+  text-decoration: none;
+  color: #333;
 }
 
-nav ul {
-  display: flex;
-  justify-content: flex-start; /* Alinea los elementos a la izquierda */
-  align-items: center;
-  background-color: rgba(69, 81, 216, 0.5);
-  padding: 0;
-  margin: 0;
+/* Estilos para el <select> */
+.form-select {
+  display: none;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  width: 400px;  
 }
 
-nav ul li {
-  padding: 10px 20px;
+/* Media queries para pantallas pequeñas */
+@media (max-width: 768px) {
+  .nav-tabla-vistas {
+    display: none; /* Oculta la lista en pantallas pequeñas */
+  }
+
+  .form-select {
+    display: block; /* Muestra el select en pantallas pequeñas */
+  }
+
+  .cards-container {
+    flex-direction: column; /* Apila las tarjetas verticalmente */
+  }
+
+  .card {
+    width: 100%; /* Ocupa todo el ancho disponible */
+  }
+
+  .tabla-container {
+    overflow-x: auto; /* Agrega scroll horizontal a las tablas */
+  }
+
+  table {
+    min-width: 600px; /* Ancho mínimo para tablas en pantallas pequeñas */
+  }
 }
-.main {
+
+/* Media queries para pantallas grandes */
+@media (min-width: 769px) {
+  .nav-tabla-vistas {
+    display: flex; /* Muestra la lista en pantallas grandes */
+  }
+
+  .form-select {
+    display: none; /* Oculta el select en pantallas grandes */
+  }
+}
+
+/* Contenedores de casos */
+.tabla-container {
+  margin-top: 20px;
+  background-color: #ffffff;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #0044cc;
+  color: white;
+}
+
+td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Intercalar colores en las filas */
+tr:nth-child(odd) td {
+  background-color: #e6f0ff;
+}
+
+tr:nth-child(even) td {
+  background-color: #0044cc;
+  color: white;
+}
+
+.app-container {
   padding: 20px;
 }
-  
-.titulo-container {
+
+/* Estilos para los contenedores de secciones */
+.section-container {
+  margin-bottom: 40px;
+}
+
+.section-container h2 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Estilos para el contenedor de tarjetas */
+.cards-container {
   display: flex;
-  align-items: center;  /* Alinea verticalmente */
-  justify-content: center; /* Centra horizontalmente */
-  gap: 10px;  /* Espacio entre el texto y el icono */
-  border: 2px solid #023e8a;  /* Borde alrededor */
-  padding: 6px; /* Espaciado interno */
-  border-radius: 8px; /* Bordes redondeados */
-  width: 97%; /* Ajusta el tamaño al contenido */
-  margin: 0 auto; /* Centra el contenedor */
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
-.circulo {  
-  font-size: 24px;  /* Tamaño del icono */
-  color: #023e8a;  /* Color del icono */
+/* Estilos para cada tarjeta */
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  padding: 20px;
+  border: 2px solid;
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
 
-  .content h2 {
-    font-size: 20px;
-    margin-bottom: 20px;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  .incidencia {
-    background-color:rgba(7, 5, 14, 0.5);
-  }
-  table th, table td {
-    padding: 10px;
-    border: 1px solid #ddd;
-  }
-  
-  table th {
-    background-color: #2c3e50;
-    color: white;
-  }
+/* Estilos para el ícono */
+.icon {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
 
-  table tr:nth-child(even) {
-    background-color:rgba(217, 238, 245, 0.5);/* Azul claro */
-  }
-  
-  table tr:nth-child(odd) {
-    background-color: rgba(113, 150, 228, 0.5);; /* Azul oscuro */
-  }
+/* Estilos para la etiqueta */
+.label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin-bottom: 5px;
+}
 
-  /* Estilos para el chatbot */
+/* Estilos para el contador */
+.count {
+  font-size: 18px;
+  font-weight: bold;
+  color: #555;
+}
+
+/* Estilos para el chatbot */
 .chatbot-container {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  z-index: 1000; /* Asegura que esté por encima de otros elementos */
+  z-index: 1000;
 }
 
 .chatbot-icon {
@@ -200,7 +308,7 @@ nav ul li {
 }
 
 .chatbot-icon:hover {
-  transform: scale(1.1); /* Efecto de escala al pasar el mouse */
+  transform: scale(1.1);
 }
 
 /* Estilos para la ventana del chat */
@@ -241,7 +349,7 @@ nav ul li {
 .chat-body {
   padding: 10px;
   max-height: 200px;
-  overflow-y: auto; /* Agrega scroll si el contenido es largo */
+  overflow-y: auto;
 }
 
 .chat-input {
@@ -265,122 +373,4 @@ nav ul li {
   border: none;
   border-radius: 5px;
   cursor: pointer;
-}
-
-/*boton de inicio*/
-.inicio ul li a {
-  text-decoration: none; /* Quita el subrayado del enlace */
-  color: rgb(12, 12, 12); /* Color del texto */
-  font-family: Georgia, 'Times New Roman', Times, serif;
-  font-weight: bold;
-  padding: 8px 16px; /* Espaciado interno para el botón */
-  background-color: #ddd; /* Color de fondo del botón */
-  border-radius: 4px; /* Bordes redondeados */
-  transition: background-color 0.3s ease; /* Transición suave */
-}
-
-.inicio ul li a:hover {
-  background-color: #ccc; /* Cambia el color al pasar el mouse */
-}
-
-main {
-  padding: 20px;
-}
-
-.encabezado {
-  background-color: #023e8a;
-  display: flex;
-}
-
-.proyecto {
-  width: 60px;
-  margin-right: 800px;
-}
-
-.icon-container {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;   /* Espacio entre los iconos */
-
-}
-
-.icon {
-  margin-right: 20px;
-  color: #0c0c0c;
-  font-size: 30px;
-  font-weight: bold;
-}
-
-.input-container {
-  position: relative;
-  width: fit-content;
-  margin-right: 5px;
-}
-
-.search {
-  padding-left: 20px;   /* Ajusta el padding para el ícono */
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  height: 25px;
-  width: 200px;
-  border-radius: 15px;
-}
-
-.search-icon {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #999;
-  pointer-events: none;   /* Evita que el ícono interfiera con el input */
-}
-
-.username {
-  color: #ddd;
-  font-family: Georgia, 'Times New Roman', Times, serif;
-  margin-right: 20px;  /* Espacio entre el nombre de usuario y el icono */
-}
-
-/* Estilos para el menú principal */
-.menu {
-  margin-top:0;
-}
-
-.menu ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  background-color: rgba(69, 81, 216, 0.5);
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-
-
-}
-
-.menu ul li a {
-  text-decoration: none;
-  color: rgb(12, 12, 12);
-  font-size: 24px;
-  font-family: Georgia, 'Times New Roman', Times, serif;
-  font-weight: bold;
-
-}
-
-.menu ul li:hover {
-  background-color: #48cae4;
-}
-
-/* Estilos para el menú de inicio */
-.inicio {
-  margin-top:0;
-
-}
-
-.inicio ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  background-color: rgba(217, 238, 245, 0.5);
- 
 }

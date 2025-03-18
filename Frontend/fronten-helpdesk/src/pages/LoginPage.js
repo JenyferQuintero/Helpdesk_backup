@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useReactTable } from '@tanstack/react-table';
 import Imagen from "../imagenes/logo proyecto color.jpeg";
 import { useNavigate } from "react-router-dom";
 import { FaUser, FaEnvelope, FaPhone } from 'react-icons/fa'; // Importa los iconos que necesites
 import "../styles/LoginPage.css";
+
 
 const Login = () => {
   const navigate = useNavigate();
@@ -51,7 +53,7 @@ const Login = () => {
   };
 
   return (
-    <div className="contLogin">
+    <div className="Login">
       <header>
         <img src={Imagen} alt="Logo" className="empresarial" />
         <h1>BIENVENIDOS A HELP DESK JCDB</h1>
@@ -80,10 +82,18 @@ const Login = () => {
               required
             />
           </div>
-
-          <button type="submit" disabled={loading}>
-            {loading ? "Cargando..." : "Aceptar"}
-          </button>
+          
+          <div>
+      <button
+        type="submit"
+        
+        className="button"
+        disabled={loading}
+        onClick={handleSubmit}
+      >
+        {loading ? "Cargando..." : "Aceptar"}
+      </button>
+    </div>
         </form>
 
         {message && <p className="mensaje">{message}</p>}

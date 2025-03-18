@@ -2,10 +2,10 @@ body {
      background:url(../imagenes/logo\ fondo.jpg);
       background-size: cover;
   }
-  .contLogin {
-    max-width: 600px;
+  .Login {
+    max-width: 500px;
     margin: 0 auto;
-    padding: 120px;
+    padding: 90px;
     background-color: rgba(82, 122, 242, 0.5);
     border-radius: 15px;
     box-shadow: 15px 15px 15px rgba(15, 12, 207, 0.3);
@@ -42,7 +42,7 @@ header {
 
 
 header h1 {
-    font-size: 22px;
+    font-size: 16px;
     color: #0e0f0f;
     margin-bottom: 20px;
 
@@ -96,7 +96,7 @@ button {
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #91bae7;
 }
 
 /* Media Queries para pantallas más grandes */

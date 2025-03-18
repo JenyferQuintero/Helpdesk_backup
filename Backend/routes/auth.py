@@ -10,6 +10,7 @@ def Login():
     user = data.get("usuario")
     password = data.get("password")
 
+
     if not user or not password:
         return jsonify({"error": "Faltan credenciales"}), 400
 
@@ -24,6 +25,7 @@ def Login():
 
         usuario = cursor.fetchone()  # Puede ser None
         print(usuario)
+        
         if usuario:
             return jsonify({
                 "mensaje": "Inicio de sesión exitoso",
