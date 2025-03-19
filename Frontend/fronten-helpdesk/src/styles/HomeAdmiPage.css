@@ -43,7 +43,7 @@
 }
 
 .link-sin-subrayado:hover {
-  background-color: #afa5f8;
+  background-color: #0096c7;
 }
 
 /* Estilos para el contenedor del input y elementos a la derecha */
@@ -374,4 +374,153 @@ tr:nth-child(even) td {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+}
+
+/* Estilos generales del menú vertical */
+.menu-vertical {
+  width: 60px; /* Ancho inicial (solo íconos) */
+  height: 100vh; /* Altura completa de la pantalla */
+  background-color: #023e8a; /* Color de fondo */
+  color: white; /* Color del texto */
+  position: fixed; /* Fija el menú a la izquierda */
+  top: 0;
+  left: 0;
+  transition: width 0.3s ease; /* Transición suave para el ancho */
+  overflow: hidden; /* Oculta el contenido que se desborda */
+  z-index: 1000; /* Asegura que el menú esté por encima de otros elementos */
+}
+
+/* Efecto hover en el menú */
+.menu-vertical:hover {
+  width: 200px; /* Ancho expandido (íconos + texto) */
+}
+
+/* Contenedor del menú */
+.container-fluid-menu {
+  padding: 20px 10px; /* Espaciado interno */
+  box-sizing: border-box; /* Incluye el padding en el ancho */
+  display: flex;
+  flex-direction: column; /* Organiza los elementos en columna */
+  align-items: center; /* Centra los elementos horizontalmente */
+}
+
+/* Logo */
+.logo-container {
+  text-align: center; /* Centra el logo */
+  margin-bottom: 20px; /* Espacio debajo del logo */
+}
+
+.logo-container img {
+  max-width: 80%; /* Ajusta el tamaño del logo */
+  height: auto;
+  border-radius: 80px;
+}
+
+/* Logo empresarial */
+.empresarial-container {
+  text-align: center; /* Centra el logo */
+  margin-bottom: 20px; /* Espacio debajo del logo */
+  margin-top: 80px;
+  opacity: 0.4; /* Opacidad del logo */
+  transition: opacity 0.3s ease; /* Transición suave para la opacidad */
+}
+
+.empresarial-container img {
+  max-width: 100%; /* Ajusta el tamaño del logo */
+  height: auto;
+  border-radius: 30px; /* Bordes redondeados */
+}
+
+/* Botón del menú */
+.menu-button {
+  background: none; /* Fondo transparente */
+  border: none; /* Sin borde */
+  color: white; /* Color del ícono */
+  font-size: 24px; /* Tamaño del ícono */
+  cursor: pointer; /* Cambia el cursor a pointer */
+  padding: 10px; /* Espaciado interno */
+  margin-bottom: 20px; /* Espacio debajo del botón */
+}
+
+/* Menú desplegable */
+.menu-vertical-desplegable {
+  width: 100%; /* Ocupa todo el ancho disponible */
+}
+
+/* Lista de íconos */
+.menu-iconos {
+  list-style: none; /* Quita los puntos de la lista */
+  padding: 0; /* Quita el padding por defecto */
+  margin: 0; /* Quita el margen por defecto */
+}
+
+/* Elementos del menú */
+.iconos-menu {
+  margin-bottom: 15px; /* Espacio entre elementos */
+}
+
+/* Enlaces del menú */
+.iconos-menu a {
+  color: rgb(9, 9, 9); /* Color del texto */
+  text-decoration: none; /* Quita el subrayado */
+  display: flex; /* Organiza ícono y texto en fila */
+  align-items: center; /* Centra verticalmente */
+  gap: 10px; /* Espacio entre ícono y texto */
+  padding: 10px; /* Espaciado interno */
+  border-radius: 5px; /* Bordes redondeados */
+  transition: background-color 0.3s; /* Transición suave para el fondo */
+}
+
+/* Efecto hover en los enlaces */
+.iconos-menu a:hover {
+  background-color: #0096c7; /* Cambia el color de fondo al pasar el cursor */
+}
+
+/* Estilos de los íconos */
+.menu-icon {
+  font-size: 24px; /* Tamaño del ícono */
+  min-width: 24px; /* Ancho mínimo para evitar cambios de tamaño */
+}
+
+/* Texto del menú */
+.menu-text {
+  white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+  opacity: 0; /* Oculta el texto inicialmente */
+  transition: opacity 0.3s ease; /* Transición suave para la opacidad */
+}
+
+/* Mostrar texto al expandir el menú */
+.menu-vertical:hover .menu-text {
+  opacity: 1; /* Muestra el texto al hacer hover */
+}
+
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 768px) {
+  .menu-vertical {
+    width: 60px; /* Mantiene el ancho reducido en móviles */
+  }
+
+  .menu-vertical:hover {
+    width: 60px; /* Evita que se expanda en móviles */
+  }
+
+  .menu-vertical-desplegable {
+    display: none; /* Oculta el menú desplegable en móviles */
+  }
+}
+
+/* Estilos generales para el encabezado */
+.container-inicio {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #3a0ca3;
+  border-bottom: 1px solid #ccc;
+  margin-left: 60px; /* Ajusta el margen izquierdo para no solaparse con el menú */
+  transition: margin-left 0.3s ease; /* Transición suave para el margen */
+}
+
+.menu-vertical:hover ~ .container-inicio {
+  margin-left: 200px; /* Ajusta el margen izquierdo cuando el menú se expande */
 }

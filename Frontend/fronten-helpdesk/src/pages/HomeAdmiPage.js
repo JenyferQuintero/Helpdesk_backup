@@ -1,32 +1,47 @@
 import React, { useState } from "react";
-import Imag from "../imagenes/logo proyecto color.jpeg";
+import Logo from "../imagenes/logo proyecto color.jpeg";
+import Logoempresarial from "../imagenes/logo empresarial.png";
 import { Link } from "react-router-dom";
-import { FaDisplay, FaPowerOff } from "react-icons/fa6";
-import { PiGearSixFill } from "react-icons/pi";
-import { FaMagnifyingGlass } from "react-icons/fa6";
-import { FaHouseMedicalCircleCheck, FaInfoCircle, FaExclamationTriangle } from "react-icons/fa";
+import { FaMagnifyingGlass, FaPowerOff } from "react-icons/fa6";
+import { FiAlignJustify } from "react-icons/fi";
+import { FcHome, FcAssistant, FcBusinessman, FcAutomatic } from "react-icons/fc";
 import "../styles/HomeAdmiPage.css";
 import ChatbotIcon from "../imagenes/img chatbot.png";
 
 const HomeAdmiPage = () => {
-  // Estado para controlar la visibilidad del chat
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [activeView, setActiveView] = useState("personal");
+  const [isSupportOpen, setIsSupportOpen] = useState(false); // Estado para el submenú de Soporte
+  const [isAdminOpen, setIsAdminOpen] = useState(false); // Estado para el submenú de Administración
+  const [isConfigOpen, setIsConfigOpen] = useState(false); // Estado para el submenú de Configuración
 
-  // Estado para controlar la vista activa
-  const [activeView, setActiveView] = useState("personal"); // "personal", "global" o "todo"
-
-  // Función para abrir/cerrar el chat
   const toggleChat = () => {
     setIsChatOpen(!isChatOpen);
   };
 
-  // Función para manejar el cambio en el <select>
+  const toggleSupport = () => {
+    setIsSupportOpen(!isSupportOpen);
+    setIsAdminOpen(false); // Cerrar otros submenús
+    setIsConfigOpen(false);
+  };
+
+  const toggleAdmin = () => {
+    setIsAdminOpen(!isAdminOpen);
+    setIsSupportOpen(false); // Cerrar otros submenús
+    setIsConfigOpen(false);
+  };
+
+  const toggleConfig = () => {
+    setIsConfigOpen(!isConfigOpen);
+    setIsSupportOpen(false); // Cerrar otros submenús
+    setIsAdminOpen(false);
+  };
+
   const handleSelectChange = (event) => {
     const value = event.target.value;
     setActiveView(value === "0" ? "personal" : value === "1" ? "global" : "todo");
   };
 
-  // Datos de tickets y problemas
   const tickets = [
     { label: "Nuevo", color: "green", icon: "🟢", count: 0 },
     { label: "En curso (asignada)", color: "lightgreen", icon: "⭕", count: 0 },
@@ -51,6 +66,114 @@ const HomeAdmiPage = () => {
 
   return (
     <div>
+      {/* Menú desplegable */}
+      <aside className="menu-vertical">
+        <div className="container-fluid-menu">
+          {/* Logo */}
+          <div className="logo-container">
+            <img src={Logo} alt="Logo" />
+          </div>
+
+          {/* Botón del menú */}
+          <button className="menu-button" type="button">
+            <FiAlignJustify className="menu-icon" />
+          </button>
+
+          {/* Menú desplegable */}
+          <div className="menu-vertical-desplegable">
+            <ul className="menu-iconos">
+              <li className="iconos-menu">
+                <Link to="/home" className="link-sin-subrayado">
+                  <FcHome className="menu-icon" />
+                  <span className="menu-text">Inicio</span>
+                </Link>
+              </li>
+
+              {/* Ícono de Soporte */}
+              <li className="iconos-menu">
+                <div className="link-sin-subrayado" onClick={toggleSupport}>
+                  <FcAssistant className="menu-icon" />
+                  <span className="menu-text">Soporte</span>
+                </div>
+                {isSupportOpen && (
+                  <ul className="submenu">
+                    <li>
+                      <Link to="/tickets" className="submenu-link">
+                        Tickets
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/crearcaso" className="submenu-link">
+                        Crear Caso
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/problemas" className="submenu-link">
+                        Problemas
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/estadisticas" className="submenu-link">
+                        Estadísticas
+                      </Link>
+                    </li>
+                  </ul>
+                )}
+              </li>
+
+              {/* Ícono de Administración */}
+              <li className="iconos-menu">
+                <div className="link-sin-subrayado" onClick={toggleAdmin}>
+                  <FcBusinessman className="menu-icon" />
+                  <span className="menu-text">Administración</span>
+                </div>
+                {isAdminOpen && (
+                  <ul className="submenu">
+                    <li>
+                      <Link to="/usuarios" className="submenu-link">
+                        Usuarios
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/grupos" className="submenu-link">
+                        Grupos
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/entidades" className="submenu-link">
+                        Entidades
+                      </Link>
+                    </li>
+                  </ul>
+                )}
+              </li>
+
+              {/* Ícono de Configuración */}
+              <li className="iconos-menu">
+                <div className="link-sin-subrayado" onClick={toggleConfig}>
+                  <FcAutomatic className="menu-icon" />
+                  <span className="menu-text">Configuración</span>
+                </div>
+                {isConfigOpen && (
+                  <ul className="submenu">
+                    <li>
+                      <Link to="/categorias" className="submenu-link">
+                        Categorías
+                      </Link>
+                    </li>
+                  </ul>
+                )}
+              </li>
+            </ul>
+          </div>
+
+          {/* Logo empresarial */}
+          <div className="empresarial-container">
+            <img src={Logoempresarial} alt="Logoempresarial" />
+          </div>
+        </div>
+      </aside>
+
       {/* Encabezado */}
       <header className="container-inicio">
         {/* Botón de Inicio */}

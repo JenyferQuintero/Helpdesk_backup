@@ -1,28 +1,20 @@
 import React, { useState } from "react";
-import Imag from "../imagenes/logo proyecto color.jpeg";
+import Logo from "../imagenes/logo proyecto color.jpeg";
+import Logoempresarial from "../imagenes/logo empresarial.png"
 import { Link } from "react-router-dom";
-import { FaDisplay, FaPowerOff } from "react-icons/fa6";
-import { PiGearSixFill } from "react-icons/pi";
-import { FaMagnifyingGlass } from "react-icons/fa6";
-import { FaHouseMedicalCircleCheck, FaInfoCircle, FaExclamationTriangle } from "react-icons/fa";
-import "../styles/HomePage.css";
+import { FaMagnifyingGlass, FaPowerOff } from "react-icons/fa6";
+import { FiAlignJustify } from "react-icons/fi";
+import { FcHome, FcCustomerSupport, FcAnswers } from "react-icons/fc";
 import ChatbotIcon from "../imagenes/img chatbot.png";
+import "../styles/HomePage.css";
 
 const HomePage = () => {
-  // Estado para controlar la visibilidad del chat
   const [isChatOpen, setIsChatOpen] = useState(false);
 
-  // Estado para controlar la vista activa
-  const [activeView, setActiveView] = useState("personal"); // "personal", "global" o "todo"
-
-  // Función para abrir/cerrar el chat
   const toggleChat = () => {
     setIsChatOpen(!isChatOpen);
   };
 
-
-
-  // Datos de tickets
   const tickets = [
     { label: "Nuevo", color: "green", icon: "🟢", count: 0 },
     { label: "En curso (asignada)", color: "lightgreen", icon: "⭕", count: 0 },
@@ -33,38 +25,67 @@ const HomePage = () => {
     { label: "Borrado", color: "red", icon: "🗑", count: 0 },
   ];
 
-
-
   return (
     <div>
-      {/* Encabezado */}
+      {/* Menú desplegable */}
+      <aside className="menu-vertical">
+        <div className="container-fluid-menu">
+          {/* Logo */}
+          <div className="logo-container">
+            <img src={Logo} alt="Logo" />
+          </div>
+
+          {/* Botón del menú */}
+          <button className="menu-button" type="button">
+            <FiAlignJustify className="menu-icon" />
+          </button>
+
+          {/* Menú desplegable */}
+          <div className="menu-vertical-desplegable">
+            <ul className="menu-iconos">
+              <li className="iconos-menu">
+                <Link to="/home" className="link-sin-subrayado">
+                  <FcHome className="menu-icon" />
+                  <span className="menu-text">Inicio</span>
+                </Link>
+              </li>
+              <li className="iconos-menu">
+                <Link to="/crearcaso" className="link-sin-subrayado">
+                  <FcCustomerSupport className="menu-icon" />
+                  <span className="menu-text">Crear Caso</span>
+                </Link>
+              </li>
+              <li className="iconos-menu">
+                <Link to="/tickets" className="link-sin-subrayado">
+                  <FcAnswers className="menu-icon" />
+                  <span className="menu-text">Tickets</span>
+                </Link>
+              </li>
+            </ul>
+          </div>
+          <div className="empresarial-container">
+            <img src={Logoempresarial} alt="Logoempresarial" />
+          </div>
+        </div>
+      </aside>
+
+      {/* Header */}
       <header className="container-inicio">
-        {/* Botón de Inicio */}
         <div className="container-inicio-img">
-          <li className="inicio">
-            <Link to="/home" className="link-sin-subrayado">Inicio</Link>
-          </li>
+          <Link to="/home" className="link-sin-subrayado">
+            <FcHome className="menu" />
+            <span>Inicio</span>
+          </Link>
         </div>
 
-        {/* Contenedor para el input, nombre de usuario y el ícono */}
         <div className="input-container">
-          {/* Input de búsqueda */}
           <div className="search-container">
-            <input
-              type="text"
-              placeholder="Buscar"
-              className="search"
-            />
-            <button
-              type="submit"
-              className="button-buscar"
-              title="Buscar"
-            >
+            <input type="text" placeholder="Buscar" className="search" />
+            <button type="submit" className="button-buscar" title="Buscar">
               <FaMagnifyingGlass className="search-icon" />
             </button>
           </div>
 
-          {/* Nombre de usuario y ícono de cerrar sesión */}
           <div className="user-container">
             <span className="username">Bienvenido, <span id="nombreusuario"></span></span>
             <div className="icon-container">
@@ -75,10 +96,16 @@ const HomePage = () => {
           </div>
         </div>
       </header>
-      <div className="container">
 
-        {/* Contenedor de Tickets */}
+      {/* Contenedor principal */}
+      <div className="container">
         <div className="section-container">
+          <div className="ticket-container">
+            <li className="creacion">
+              <a className="creacion-de-ticket">Creación de Ticket</a>
+            </li>
+          </div>
+
           <h2>Tickets</h2>
           <div className="cards-container">
             {tickets.map((ticket, index) => (
@@ -91,7 +118,6 @@ const HomePage = () => {
           </div>
         </div>
 
-        {/* Tabla de encuesta de satisfacción */}
         <div className="tabla-container">
           <h2>ENCUESTA DE SATISFACCIÓN</h2>
           <table>
@@ -108,17 +134,15 @@ const HomePage = () => {
                 <td>ID: 2503150021</td>
                 <td>Julian Antonio Niño Oedoy</td>
                 <td>General</td>
-                <td>ALTA MEDICA (1 - 0)</td>
+                <td>ALTA MÉDICA (1 - 0)</td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
 
-
       {/* Chatbot */}
       <div className="chatbot-container">
-        {/* Imagen del chatbot */}
         <img
           src={ChatbotIcon}
           alt="Chatbot"
@@ -126,7 +150,6 @@ const HomePage = () => {
           onClick={toggleChat}
         />
 
-        {/* Chat (se muestra solo si isChatOpen es true) */}
         {isChatOpen && (
           <div className="chat-window">
             <div className="chat-header">
@@ -145,7 +168,7 @@ const HomePage = () => {
           </div>
         )}
       </div>
-    </div >
+    </div>
   );
 };
 
