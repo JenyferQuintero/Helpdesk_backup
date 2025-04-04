@@ -1078,3 +1078,15 @@ tr:hover {
   user-select: none;
 }
 
+.linkTicket {
+  color: #3a0ca3;
+  text-decoration: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.linkTicket:hover {
+  color: #2a0a8a;
+  text-decoration: underline;
+}

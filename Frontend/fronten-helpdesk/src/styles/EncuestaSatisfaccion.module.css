@@ -1,0 +1,147 @@
+.container {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  }
+  
+  h1 {
+    color: #3a0ca3;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  
+  label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #333;
+  }
+  
+  .rating {
+    display: flex;
+    justify-content: center;
+    gap: 0.8rem;
+    margin: 0.5rem 0;
+  }
+  
+  .star {
+    background: none;
+    border: none;
+    font-size: 2.5rem;
+    color: #e0e0e0;
+    cursor: pointer;
+    transition: all 0.2s;
+    padding: 0 0.2rem;
+    position: relative;
+  }
+  
+  .star:hover {
+    transform: scale(1.1);
+  }
+  
+  .star.active {
+    color: #ffc107;
+    text-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
+  }
+  
+  .star::after {
+    content: attr(data-value);
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.9rem;
+    color: #666;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  
+  .star:hover::after {
+    opacity: 1;
+  }
+  
+  .textarea {
+    width: 95%;
+    min-height: 120px;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 1rem;
+    resize: vertical;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  
+  .textarea:focus {
+    outline: none;
+    border-color: #3a0ca3;
+    box-shadow: 0 0 0 3px rgba(58, 12, 163, 0.1);
+  }
+  
+  .submitButton {
+    padding: 0.8rem 1.5rem;
+    background-color: #3a0ca3;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    align-self: center;
+    width: 200px;
+    margin-top: 1rem;
+  }
+  
+  .submitButton:hover {
+    background-color: #2a0a8a;
+    transform: translateY(-2px);
+  }
+  
+  .submitButton:active {
+    transform: translateY(0);
+  }
+  
+  /* Feedback después de enviar */
+  .successMessage {
+    text-align: center;
+    color: #4caf50;
+    font-weight: 500;
+    margin-top: 1rem;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .container {
+      padding: 1.5rem;
+      margin: 1rem;
+    }
+  
+    .rating {
+      gap: 0.5rem;
+    }
+  
+    .star {
+      font-size: 2rem;
+    }
+  
+    .submitButton {
+      width: 100%;
+    }
+  }

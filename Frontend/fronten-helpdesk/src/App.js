@@ -14,6 +14,8 @@ import Usuarios from "./pages/Usuarios";
 import Entidades from "./pages/Entidades";
 import Grupos from "./pages/Grupos";
 import Categorias from "./pages/Categorias";
+import SolucionTickets from "./pages/SolucionTickets";
+import EncuestaSatisfaccion from "./pages/EncuestaSatisfaccion";
 
 
 function App() {
@@ -33,6 +35,8 @@ function App() {
         <Route path="/Grupos" element={<Grupos />} />
         <Route path="/Entidades" element={<Entidades />} />
         <Route path="/Categorias" element={<Categorias />} /> 
+        <Route path="/tickets/solucion/:id" element={<SolucionTickets />} />
+        <Route path="/EncuestaSatisfaccion" element={<EncuestaSatisfaccion />} /> 
       
     
       </Routes>

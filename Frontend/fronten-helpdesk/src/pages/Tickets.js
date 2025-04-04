@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaMagnifyingGlass, FaPowerOff } from "react-icons/fa6";
 import { FiAlignJustify } from "react-icons/fi";
-import { FcHome, FcCustomerSupport, FcAnswers, FcEmptyFilter,FcPrint } from "react-icons/fc";
+import { FcHome, FcCustomerSupport, FcAnswers, FcEmptyFilter, FcPrint } from "react-icons/fc";
 import { FaFileExcel, FaFilePdf, FaFileCsv, FaChevronDown, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import Logo from "../imagenes/logo proyecto color.jpeg";
 import Logoempresarial from "../imagenes/logo empresarial.png";
@@ -136,7 +136,7 @@ const Tickets = () => {
   };
 
   return (
-       <div className={styles.containerPrincipal}>
+    <div className={styles.containerPrincipal}>
       {/* Menú Vertical */}
       <aside
         className={`${styles.menuVertical} ${isMenuExpanded ? styles.expanded : ""}`}
@@ -412,8 +412,16 @@ const Tickets = () => {
             <tbody>
               {currentRows.map((item, index) => (
                 <tr key={index}>
-                  <td>{item.id}</td>
-                  <td>{item.titulo}</td>
+                  <td>
+                    <Link to={`/tickets/solucion/${item.id}`} className={styles.linkTicket}>
+                      {item.id}
+                    </Link>
+                  </td>
+                  <td>
+                    <Link to={`/tickets/solucion/${item.id}`} className={styles.linkTicket}>
+                      {item.titulo}
+                    </Link>
+                  </td>
                   <td>{item.solicitante}</td>
                   <td>{item.descripcion}</td>
                   <td>
