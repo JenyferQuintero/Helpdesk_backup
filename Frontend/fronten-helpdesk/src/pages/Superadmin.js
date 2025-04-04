@@ -10,9 +10,10 @@ import Logo from "../imagenes/logo proyecto color.jpeg";
 import Logoempresarial from "../imagenes/logo empresarial.png";
 import ChatbotIcon from "../imagenes/img chatbot.png";
 // Estilos
-import styles from "../styles/HomeAdmiPage.module.css";
+import styles from "../styles/Superadmin.module.css";
 
-const HomeAdmiPage = () => {
+
+const Superadmin = () => {
 
   // Estados
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -22,6 +23,7 @@ const HomeAdmiPage = () => {
   const [isConfigOpen, setIsConfigOpen] = useState(false);
   const [isMenuExpanded, setIsMenuExpanded] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  
 
   // Datos
   const tickets = [
@@ -99,7 +101,7 @@ const HomeAdmiPage = () => {
           <div className={`${styles.menuVerticalDesplegable} ${isMobileMenuOpen ? styles.mobileMenuOpen : ''}`}>
             <ul className={styles.menuIconos}>
               <li className={styles.iconosMenu}>
-                <Link to="/HomeAdmiPage" className={styles.linkSinSubrayado}>
+                <Link to="/Superadmin" className={styles.linkSinSubrayado}>
                   <FcHome className={styles.menuIcon} />
                   <span className={styles.menuText}>Inicio</span>
                 </Link>
@@ -195,7 +197,7 @@ const HomeAdmiPage = () => {
       {/* Header */}
       <header className={styles.containerInicio} style={{ marginLeft: isMenuExpanded ? "200px" : "60px" }}>
         <div className={styles.containerInicioImg}>
-          <Link to="/HomeAdmiPage" className={styles.linkSinSubrayado}>
+          <Link to="/Superadmin" className={styles.linkSinSubrayado}>
             <FcHome className={styles.menuIcon} />
             <span>Inicio</span>
           </Link>
@@ -411,4 +413,4 @@ const HomeAdmiPage = () => {
   );
 };
 
-export default HomeAdmiPage;
+export default Superadmin;
