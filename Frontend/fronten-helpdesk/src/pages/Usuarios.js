@@ -7,10 +7,13 @@ import { FiAlignJustify } from "react-icons/fi";
 import { FcHome, FcAssistant, FcBusinessman, FcAutomatic, FcAnswers, FcCustomerSupport, FcExpired, FcGenealogy, FcBullish, FcConferenceCall, FcPortraitMode, FcOrganization } from "react-icons/fc";
 // Estilos
 import styles from "../styles/Usuarios.module.css";
+import axios from "axios";
 // Imágenes
 import Logo from "../imagenes/logo proyecto color.jpeg";
 import Logoempresarial from "../imagenes/logo empresarial.png";
 import ChatbotIcon from "../imagenes/img chatbot.png";
+
+const nombre = localStorage.getItem("nombre");
 
 const Usuarios = () => {
   // Estados para el menú y UI
@@ -20,7 +23,7 @@ const Usuarios = () => {
   const [isSupportOpen, setIsSupportOpen] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [isConfigOpen, setIsConfigOpen] = useState(false);
-  
+
   // Estados para gestión de usuarios
   const [showForm, setShowForm] = useState(false);
   const [users, setUsers] = useState([]);
@@ -30,7 +33,7 @@ const Usuarios = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
   const [formErrors, setFormErrors] = useState({});
-  
+
   // Estado para el formulario
   const [formData, setFormData] = useState({
     usuario: '',
@@ -50,9 +53,9 @@ const Usuarios = () => {
 
   // Validación del formulario en tiempo real
   const validateField = (name, value) => {
-    const errors = {...formErrors};
-    
-    switch(name) {
+    const errors = { ...formErrors };
+
+    switch (name) {
       case 'usuario':
         if (!value.trim()) errors.usuario = 'Usuario es requerido';
         else if (value.length < 3) errors.usuario = 'Mínimo 3 caracteres';
@@ -91,7 +94,7 @@ const Usuarios = () => {
       default:
         break;
     }
-    
+
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -115,15 +118,11 @@ const Usuarios = () => {
   const fetchUsers = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('http://localhost:5000/api/usuarios');
-      const data = await response.json();
-      if (data.success) {
-        setUsers(data.users);
-      } else {
-        console.error('Error al cargar usuarios:', data.message);
-      }
+      const response = await axios.get("http://localhost:5000/usuarios/obtener");
+      const data = response.data;
+      setUsers(data); // directamente, porque es un array
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error al cargar usuarios:", error);
     } finally {
       setIsLoading(false);
     }
@@ -131,7 +130,7 @@ const Usuarios = () => {
 
   // Preparar formulario para edición
   const handleEdit = (user) => {
-    setEditingUser(user._id);
+    setEditingUser(user.id_usuario);
     setFormData({
       usuario: user.usuario,
       nombres: user.nombres,
@@ -149,16 +148,16 @@ const Usuarios = () => {
   // Manejar envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Validación final antes de enviar
     let isValid = true;
-    const fieldsToValidate = ['usuario', 'nombres', 'apellidos', 'correo', 'entidad', 'rol'];
+    const fieldsToValidate = ['usuario', 'nombres', 'apellidos', 'telefono', 'correo', 'entidad', 'rol'];
     if (!editingUser) fieldsToValidate.push('contrasena');
-    
+
     fieldsToValidate.forEach(field => {
       isValid = validateField(field, formData[field]) && isValid;
     });
-    
+
     if (!isValid) {
       alert('Por favor complete todos los campos requeridos correctamente');
       return;
@@ -166,12 +165,12 @@ const Usuarios = () => {
 
     setIsLoading(true);
     try {
-      const url = editingUser 
-        ? `http://localhost:5000/api/usuarios/${editingUser}`
-        : 'http://localhost:5000/api/usuarios';
-      
+      const url = editingUser
+        ? `http://localhost:5000/usuarios/actualizacion/${editingUser}`
+        : 'http://localhost:5000/usuarios/creacion';
+
       const method = editingUser ? 'PUT' : 'POST';
-      
+
       const response = await fetch(url, {
         method,
         headers: {
@@ -400,7 +399,7 @@ const Usuarios = () => {
             </button>
           </div>
           <div className={styles.userContainer}>
-            <span className={styles.username}>Bienvenido, <span id="nombreusuario"></span></span>
+            <span className={styles.username}>Bienvenido, <span id="nombreusuario">{nombre}</span></span>
             <div className={styles.iconContainer}>
               <Link to="/"><FaPowerOff className={styles.icon} /></Link>
             </div>
@@ -438,37 +437,37 @@ const Usuarios = () => {
                 <div className={styles.columna}>
                   <div className={styles.formGroup}>
                     <label className={styles.label}>Usuario</label>
-                    <input 
-                      type="text" 
-                      className={`${styles.input} ${formErrors.usuario ? styles.inputError : ''}`} 
-                      name="usuario" 
-                      value={formData.usuario} 
-                      onChange={handleChange} 
-                      required 
+                    <input
+                      type="text"
+                      className={`${styles.input} ${formErrors.usuario ? styles.inputError : ''}`}
+                      name="usuario"
+                      value={formData.usuario}
+                      onChange={handleChange}
+                      required
                     />
                     {formErrors.usuario && <span className={styles.errorMessage}>{formErrors.usuario}</span>}
                   </div>
                   <div className={styles.formGroup}>
                     <label className={styles.label}>Nombre(s)</label>
-                    <input 
-                      type="text" 
-                      className={`${styles.input} ${formErrors.nombres ? styles.inputError : ''}`} 
-                      name="nombres" 
-                      value={formData.nombres} 
-                      onChange={handleChange} 
-                      required 
+                    <input
+                      type="text"
+                      className={`${styles.input} ${formErrors.nombres ? styles.inputError : ''}`}
+                      name="nombres"
+                      value={formData.nombres}
+                      onChange={handleChange}
+                      required
                     />
                     {formErrors.nombres && <span className={styles.errorMessage}>{formErrors.nombres}</span>}
                   </div>
                   <div className={styles.formGroup}>
                     <label className={styles.label}>Apellido(s)</label>
-                    <input 
-                      type="text" 
-                      className={`${styles.input} ${formErrors.apellidos ? styles.inputError : ''}`} 
-                      name="apellidos" 
-                      value={formData.apellidos} 
-                      onChange={handleChange} 
-                      required 
+                    <input
+                      type="text"
+                      className={`${styles.input} ${formErrors.apellidos ? styles.inputError : ''}`}
+                      name="apellidos"
+                      value={formData.apellidos}
+                      onChange={handleChange}
+                      required
                     />
                     {formErrors.apellidos && <span className={styles.errorMessage}>{formErrors.apellidos}</span>}
                   </div>
@@ -477,35 +476,35 @@ const Usuarios = () => {
                 <div className={styles.columna}>
                   <div className={styles.formGroup}>
                     <label className={styles.label}>Correo</label>
-                    <input 
-                      type="email" 
-                      className={`${styles.input} ${formErrors.correo ? styles.inputError : ''}`} 
-                      name="correo" 
-                      value={formData.correo} 
-                      onChange={handleChange} 
-                      required 
+                    <input
+                      type="email"
+                      className={`${styles.input} ${formErrors.correo ? styles.inputError : ''}`}
+                      name="correo"
+                      value={formData.correo}
+                      onChange={handleChange}
+                      required
                     />
                     {formErrors.correo && <span className={styles.errorMessage}>{formErrors.correo}</span>}
                   </div>
                   <div className={styles.formGroup}>
                     <label className={styles.label}>Teléfono</label>
-                    <input 
-                      type="tel" 
-                      className={`${styles.input} ${formErrors.telefono ? styles.inputError : ''}`} 
-                      name="telefono" 
-                      value={formData.telefono} 
-                      onChange={handleChange} 
+                    <input
+                      type="tel"
+                      className={`${styles.input} ${formErrors.telefono ? styles.inputError : ''}`}
+                      name="telefono"
+                      value={formData.telefono}
+                      onChange={handleChange}
                     />
                     {formErrors.telefono && <span className={styles.errorMessage}>{formErrors.telefono}</span>}
                   </div>
                   <div className={styles.formGroup}>
                     <label className={styles.label}>Contraseña</label>
-                    <input 
-                      type="password" 
-                      className={`${styles.input} ${formErrors.contrasena ? styles.inputError : ''}`} 
-                      name="contrasena" 
-                      value={formData.contrasena} 
-                      onChange={handleChange} 
+                    <input
+                      type="password"
+                      className={`${styles.input} ${formErrors.contrasena ? styles.inputError : ''}`}
+                      name="contrasena"
+                      value={formData.contrasena}
+                      onChange={handleChange}
                       placeholder={editingUser ? "Dejar en blanco para no cambiar" : ""}
                       required={!editingUser}
                     />
@@ -524,11 +523,11 @@ const Usuarios = () => {
                 </div>
                 <div className={styles.formGroup}>
                   <label className={styles.label}>Entidades</label>
-                  <select 
-                    className={`${styles.select} ${formErrors.entidad ? styles.inputError : ''}`} 
-                    name="entidad" 
-                    value={formData.entidad} 
-                    onChange={handleChange} 
+                  <select
+                    className={`${styles.select} ${formErrors.entidad ? styles.inputError : ''}`}
+                    name="entidad"
+                    value={formData.entidad}
+                    onChange={handleChange}
                     required
                   >
                     <option value="">Seleccione...</option>
@@ -542,11 +541,11 @@ const Usuarios = () => {
                 </div>
                 <div className={styles.formGroup}>
                   <label className={styles.label}>Rol</label>
-                  <select 
-                    className={`${styles.select} ${formErrors.rol ? styles.inputError : ''}`} 
-                    name="rol" 
-                    value={formData.rol} 
-                    onChange={handleChange} 
+                  <select
+                    className={`${styles.select} ${formErrors.rol ? styles.inputError : ''}`}
+                    name="rol"
+                    value={formData.rol}
+                    onChange={handleChange}
                     required
                   >
                     <option value="">Seleccione...</option>
@@ -589,12 +588,12 @@ const Usuarios = () => {
                       <option value="rol">Rol</option>
                       <option value="entidad">Entidad</option>
                     </select>
-                    <input 
-                      type="text" 
-                      className={styles.searchInput} 
+                    <input
+                      type="text"
+                      className={styles.searchInput}
                       placeholder={`Buscar por ${searchField}...`}
-                      value={searchTerm} 
-                      onChange={(e) => setSearchTerm(e.target.value)} 
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
                     />
                   </div>
 
@@ -611,12 +610,12 @@ const Usuarios = () => {
 
                 {additionalFilters.map((filter, index) => (
                   <div key={index} className={styles.additionalFilter}>
-                    <select 
-                      className={styles.searchSelect} 
-                      value={filter.field} 
+                    <select
+                      className={styles.searchSelect}
+                      value={filter.field}
                       onChange={(e) => handleFilterChange(index, 'field', e.target.value)}
                     >
-                      <option value="usuario">Usuario</option>
+                      <option value="nombre_usuario">Usuario</option>
                       <option value="nombres">Nombre</option>
                       <option value="apellidos">Apellidos</option>
                       <option value="correo">Correo</option>
@@ -624,12 +623,12 @@ const Usuarios = () => {
                       <option value="entidad">Entidad</option>
                       <option value="activo">Activo</option>
                     </select>
-                    <input 
-                      type="text" 
-                      className={styles.searchInput} 
+                    <input
+                      type="text"
+                      className={styles.searchInput}
                       placeholder={`Filtrar por ${filter.field}...`}
-                      value={filter.value} 
-                      onChange={(e) => handleFilterChange(index, 'value', e.target.value)} 
+                      value={filter.value}
+                      onChange={(e) => handleFilterChange(index, 'value', e.target.value)}
                     />
                     <button type="button" onClick={() => removeFilter(index)} className={styles.removeFilterButton}>×</button>
                   </div>
@@ -663,8 +662,8 @@ const Usuarios = () => {
                       </tr>
                     ) : currentRows.length > 0 ? (
                       currentRows.map((user) => (
-                        <tr key={user._id}>
-                          <td>{user.usuario}</td>
+                        <tr key={user.id_usuario}>
+                          <td>{user.nombre_usuario}</td>
                           <td>{user.nombres}</td>
                           <td>{user.apellidos}</td>
                           <td>{user.correo}</td>
@@ -672,7 +671,7 @@ const Usuarios = () => {
                           <td>{user.rol}</td>
                           <td>{user.activo === 'si' ? 'Sí' : 'No'}</td>
                           <td>
-                            <button 
+                            <button
                               className={styles.actionButton}
                               onClick={() => handleEdit(user)}
                             >
@@ -698,9 +697,9 @@ const Usuarios = () => {
             <div className={styles.paginationControls}>
               <div className={styles.rowsPerPageSelector}>
                 <span>Filas por página:</span>
-                <select 
-                  value={rowsPerPage} 
-                  onChange={handleRowsPerPageChange} 
+                <select
+                  value={rowsPerPage}
+                  onChange={handleRowsPerPageChange}
                   className={styles.rowsSelect}
                   disabled={isLoading}
                 >
@@ -714,9 +713,9 @@ const Usuarios = () => {
               </div>
 
               <div className={styles.pagination}>
-                <button 
-                  onClick={prevPage} 
-                  disabled={currentPage === 1 || isLoading} 
+                <button
+                  onClick={prevPage}
+                  disabled={currentPage === 1 || isLoading}
                   className={styles.paginationButton}
                 >
                   <FaChevronLeft />
@@ -735,8 +734,8 @@ const Usuarios = () => {
                   }
 
                   return (
-                    <button 
-                      key={pageNumber} 
+                    <button
+                      key={pageNumber}
                       onClick={() => paginate(pageNumber)}
                       disabled={isLoading}
                       className={`${styles.paginationButton} ${currentPage === pageNumber ? styles.active : ''}`}
@@ -749,7 +748,7 @@ const Usuarios = () => {
                 {totalPages > 5 && currentPage < totalPages - 2 && (
                   <>
                     <span className={styles.paginationEllipsis}>...</span>
-                    <button 
+                    <button
                       onClick={() => paginate(totalPages)}
                       disabled={isLoading}
                       className={`${styles.paginationButton} ${currentPage === totalPages ? styles.active : ''}`}
@@ -759,9 +758,9 @@ const Usuarios = () => {
                   </>
                 )}
 
-                <button 
-                  onClick={nextPage} 
-                  disabled={currentPage === totalPages || isLoading} 
+                <button
+                  onClick={nextPage}
+                  disabled={currentPage === totalPages || isLoading}
                   className={styles.paginationButton}
                 >
                   <FaChevronRight />

@@ -22,7 +22,8 @@ const Login = () => {
         password,
       });
       if (response.status === 200) {
-        const { nombre, usuario, rol } = response.data;
+        const { nombre, usuario, rol, usuario_id } = response.data;
+        localStorage.setItem("id_usuario", usuario_id );
         localStorage.setItem("nombre", nombre);
         console.log(nombre);
         localStorage.setItem("usuario", usuario);
