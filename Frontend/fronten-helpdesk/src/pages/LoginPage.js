@@ -22,7 +22,9 @@ const Login = () => {
         password,
       });
       if (response.status === 200) {
-        const { usuario, rol } = response.data;
+        const { nombre, usuario, rol } = response.data;
+        localStorage.setItem("nombre", nombre);
+        console.log(nombre);
         localStorage.setItem("usuario", usuario);
         localStorage.setItem("rol", rol);
         console.log(rol);
@@ -30,7 +32,7 @@ const Login = () => {
         if (rol === "usuario") {
           navigate("/home");
         } else if (rol === "administrador") {
-          navigate("/Superadmi");
+          navigate("/Superadmin");
         } else if (rol === "tecnico") {
           navigate ("/HomeAdmiPage")
         }else {

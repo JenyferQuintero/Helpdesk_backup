@@ -23,7 +23,7 @@ const Superadmin = () => {
   const [isConfigOpen, setIsConfigOpen] = useState(false);
   const [isMenuExpanded, setIsMenuExpanded] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  
+
 
   // Datos
   const tickets = [
@@ -47,7 +47,7 @@ const Superadmin = () => {
     { label: "Cerrado", color: "black", icon: "⚫", count: 0 },
     { label: "Borrado", color: "red", icon: "🗑", count: 0 },
   ];
-
+  const nombre = localStorage.getItem("nombre");
   // Handlers
   const toggleChat = () => setIsChatOpen(!isChatOpen);
 
@@ -78,7 +78,7 @@ const Superadmin = () => {
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
   return (
-      <div className={styles.containerPrincipal}>
+    <div className={styles.containerPrincipal}>
       {/* Menú Vertical */}
       <aside
         className={`${styles.menuVertical} ${isMenuExpanded ? styles.expanded : ""}`}
@@ -218,7 +218,7 @@ const Superadmin = () => {
             </button>
           </div>
           <div className={styles.userContainer}>
-            <span className={styles.username}>Bienvenido, <span id="nombreusuario"></span></span>
+            <span className={styles.username}>Bienvenido, <span id="nombreusuario">{nombre}</span></span>
             <div className={styles.iconContainer}>
               <Link to="/">
                 <FaPowerOff className={styles.icon} />

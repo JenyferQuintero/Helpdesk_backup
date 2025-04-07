@@ -15,7 +15,7 @@ const HomePage = () => {
   const toggleChat = () => {
     setIsChatOpen(!isChatOpen);
   };
-
+  const nombre = localStorage.getItem("nombre");
   const toggleMenu = () => setIsMenuExpanded(!isMenuExpanded);
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
@@ -28,9 +28,8 @@ const HomePage = () => {
     { label: "Cerrado", color: "black", icon: "⚫", count: 0 },
     { label: "Borrado", color: "red", icon: "🗑", count: 0 },
   ];
-
   return (
-      <div className={styles.containerPrincipal}>
+    <div className={styles.containerPrincipal}>
       <aside className={`${styles.menuVertical} ${isMenuExpanded ? styles.expanded : ""}`} onMouseEnter={toggleMenu} onMouseLeave={toggleMenu}>
         <div className={styles.containerFluidMenu}>
           <div className={styles.logoContainer}>
@@ -86,7 +85,7 @@ const HomePage = () => {
             </button>
           </div>
           <div className={styles.userContainer}>
-            <span className={styles.username}>Bienvenido, <span id="nombreusuario"></span></span>
+            <span className={styles.username}>Bienvenido, <span id="nombreusuario">{nombre}</span></span>
             <div className={styles.iconContainer}>
               <Link to="/">
                 <FaPowerOff className={styles.icon} />
