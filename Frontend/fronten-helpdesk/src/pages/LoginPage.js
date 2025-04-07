@@ -30,7 +30,7 @@ const Login = () => {
         if (rol === "usuario") {
           navigate("/home");
         } else if (rol === "administrador") {
-          navigate("/Superadmi");
+          navigate("/Superadmin");
         } else if (rol === "tecnico") {
           navigate ("/HomeAdmiPage")
         }else {

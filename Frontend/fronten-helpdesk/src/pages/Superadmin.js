@@ -23,7 +23,7 @@ const Superadmin = () => {
   const [isConfigOpen, setIsConfigOpen] = useState(false);
   const [isMenuExpanded, setIsMenuExpanded] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  
+
 
   // Datos
   const tickets = [
@@ -78,7 +78,7 @@ const Superadmin = () => {
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
   return (
-      <div className={styles.containerPrincipal}>
+    <div className={styles.containerPrincipal}>
       {/* Menú Vertical */}
       <aside
         className={`${styles.menuVertical} ${isMenuExpanded ? styles.expanded : ""}`}
