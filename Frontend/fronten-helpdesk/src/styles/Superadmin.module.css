@@ -261,12 +261,12 @@
   }
   
   tr:nth-child(even) td {
-    background-color: #0044cc;
+    background-color: #87bfff;
     color: white;
   }
   
   tr:hover td {
-    background-color: #3a0ca3;
+    background-color: #add7f6;
     color: white;
     transform: scale(1.01);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);

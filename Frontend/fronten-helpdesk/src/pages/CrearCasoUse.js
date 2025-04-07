@@ -122,7 +122,7 @@ const CrearCasoUse = () => {
               <li>
                 <Link to="/CrearCasoUse" className={styles.linkSinSubrayado}>
                   <FcCustomerSupport className={styles.menuIcon} />
-                  <span className={styles.creacionDeTicket}>Crear Caso</span>
+                  <span className={styles.creacionDeTicket}>Describa el caso a reportar</span>
                 </Link>
               </li>
             </ul>

@@ -395,7 +395,7 @@ const Tickets = () => {
 
         {/* Tabla de tickets */}
         <div className={styles.tableContainer}>
-          <table className={styles.table}>
+          <table className={styles.tableticket}>
             <thead>
               <tr>
                 <th>ID</th>
