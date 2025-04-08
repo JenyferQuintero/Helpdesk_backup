@@ -106,3 +106,18 @@ def obtener_usuarios():
     except Exception as e:
         print("Error al obtener usuarios:", e)
         return jsonify({"success": False, "message": "Error al obtener usuarios"}), 500
+
+@usuarios_bp.route("/eliminar/<int:usuario_id>", methods=["DELETE"])
+def eliminar_usuario(usuario_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute("DELETE FROM usuarios WHERE id_usuario = %s", (usuario_id,))
+        conn.commit()
+        return jsonify({"success": True, "message": "Usuario eliminado correctamente"}), 200
+    except Exception as e:
+        print("Error al eliminar usuario:", e)
+        return jsonify({"success": False, "message": "Error al eliminar el usuario"}), 500
+    finally:
+        cursor.close()
+        conn.close()
