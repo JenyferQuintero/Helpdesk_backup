@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-02-2025 a las 22:00:32
+-- Tiempo de generación: 17-02-2025 a las 21:55:12
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -24,27 +24,11 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `dependencias`
---
-
-CREATE TABLE `dependencias` (
-  `id_dependencia` int(11) NOT NULL,
-  `nombre_dependencia` varchar(100) NOT NULL,
-  `descripcion` text DEFAULT NULL,
-  `ubicacion` varchar(200) DEFAULT NULL,
-  `correo_contacto` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `tickets`
 --
 
 CREATE TABLE `tickets` (
   `id_ticket` int(11) NOT NULL,
-  `id_usuario_creador` int(11) NOT NULL,
-  `id_usuario_asignado` int(11) DEFAULT NULL,
   `incidencias` set('baja','media','alta','critica') NOT NULL,
   `estado_ticket` set('nuevo','asignado','en_proceso','resuelto','cerrado') NOT NULL DEFAULT 'nuevo',
   `nombre_categoria` varchar(100) NOT NULL,
@@ -70,55 +54,29 @@ CREATE TABLE `usuarios` (
   `nombre_usuario` varchar(50) NOT NULL,
   `contraseña` varchar(255) NOT NULL,
   `rol` set('administrador','tecnico','usuario') NOT NULL,
-  `id_dependencia` int(11) DEFAULT NULL,
   `fecha_registro` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `usuarios`
---
-
-INSERT INTO `usuarios` (`id_usuario`, `nombres`, `apellidos`, `correo`, `telefono`, `nombre_usuario`, `contraseña`, `rol`, `id_dependencia`, `fecha_registro`) VALUES
-(1, 'Admin', 'Sistema', 'admin@helpdeskjcbd.com', '123456789', 'admin', 'admin123', 'administrador', NULL, '2025-02-18 06:15:19'),
-(2, 'Prueba', 'Sistema', 'admin@helpdeskjcbd.com', '123456789', 'prueba_1', '12345', 'usuario', NULL, '2025-02-18 06:16:34'),
-(3, 'Sistema', 'Sistema', 'admin@helpdeskjcbd.com', '123456789', 'prueba_2', '1234', 'usuario', NULL, '2025-02-18 06:17:18'),
-(4, 'Ad', 'tecnico', 'admin@helpdeskjcbd.com', '123456789', 'tecnico_1', '123456', 'tecnico', NULL, '2025-02-18 06:18:23');
 
 --
 -- Índices para tablas volcadas
 --
 
 --
--- Indices de la tabla `dependencias`
---
-ALTER TABLE `dependencias`
-  ADD PRIMARY KEY (`id_dependencia`);
-
---
 -- Indices de la tabla `tickets`
 --
 ALTER TABLE `tickets`
-  ADD PRIMARY KEY (`id_ticket`),
-  ADD KEY `tickets_ibfk_1` (`id_usuario_creador`),
-  ADD KEY `tickets_ibfk_2` (`id_usuario_asignado`);
+  ADD PRIMARY KEY (`id_ticket`);
 
 --
 -- Indices de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`id_usuario`),
-  ADD UNIQUE KEY `nombre_usuario` (`nombre_usuario`),
-  ADD KEY `usuarios_ibfk_1` (`id_dependencia`);
+  ADD UNIQUE KEY `nombre_usuario` (`nombre_usuario`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
 --
-
---
--- AUTO_INCREMENT de la tabla `dependencias`
---
-ALTER TABLE `dependencias`
-  MODIFY `id_dependencia` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `tickets`
@@ -130,7 +88,7 @@ ALTER TABLE `tickets`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Restricciones para tablas volcadas
@@ -140,14 +98,7 @@ ALTER TABLE `usuarios`
 -- Filtros para la tabla `tickets`
 --
 ALTER TABLE `tickets`
-  ADD CONSTRAINT `tickets_ibfk_1` FOREIGN KEY (`id_usuario_creador`) REFERENCES `usuarios` (`id_usuario`),
-  ADD CONSTRAINT `tickets_ibfk_2` FOREIGN KEY (`id_usuario_asignado`) REFERENCES `usuarios` (`id_usuario`);
-
---
--- Filtros para la tabla `usuarios`
---
-ALTER TABLE `usuarios`
-  ADD CONSTRAINT `usuarios_ibfk_1` FOREIGN KEY (`id_dependencia`) REFERENCES `dependencias` (`id_dependencia`);
+  ADD CONSTRAINT `tickets_ibfk_1` FOREIGN KEY (`id_ticket`) REFERENCES `usuarios` (`id_usuario`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
