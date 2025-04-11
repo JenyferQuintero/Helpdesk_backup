@@ -123,10 +123,11 @@ const CrearCasoUse = () => {
             <ul className={styles.creacion}>
               <li>
                 <Link to="/CrearCasoUse" className={styles.linkSinSubrayado}>
-                  <FcCustomerSupport className={styles.menuIcon} />
+                <FcCustomerSupport className={styles.menuIcon} />
                   <span className={styles.creacionDeTicket}>Describa el caso a reportar</span>
                 </Link>
               </li>
+              
             </ul>
           </div>
         </div>
