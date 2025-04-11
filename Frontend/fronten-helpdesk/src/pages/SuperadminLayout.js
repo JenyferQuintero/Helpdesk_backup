@@ -21,6 +21,9 @@ const SuperadminLayout = () => {
   const [isConfigOpen, setIsConfigOpen] = useState(false);
 
   // Handlers
+
+  const nombre = localStorage.getItem("nombre");
+  
   const toggleChat = () => setIsChatOpen(!isChatOpen);
   const toggleMenu = () => setIsMenuExpanded(!isMenuExpanded);
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);

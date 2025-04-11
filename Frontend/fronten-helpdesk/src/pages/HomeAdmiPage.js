@@ -47,6 +47,8 @@ const HomeAdmiPage = () => {
   ];
 
   // Handlers
+  const nombre = localStorage.getItem("nombre");
+
   const toggleChat = () => setIsChatOpen(!isChatOpen);
 
   const toggleSupport = () => {
@@ -216,7 +218,7 @@ const HomeAdmiPage = () => {
             </button>
           </div>
           <div className={styles.userContainer}>
-            <span className={styles.username}>Bienvenido, <span id="nombreusuario"></span></span>
+            <span className={styles.username}>Bienvenido, <span id="nombreusuario">{nombre}</span></span>
             <div className={styles.iconContainer}>
               <Link to="/">
                 <FaPowerOff className={styles.icon} />
