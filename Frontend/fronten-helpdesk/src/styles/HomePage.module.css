@@ -10,9 +10,8 @@
     box-sizing: border-box; /* para incluir padding en el tamaño total */
   }
   .container {
-    width: 82;
-    height: 100%;
-    margin: 0 auto;
+    width: calc(90% - 80px); /* Ajustar según el margen */
+    margin: 20px auto;
     padding: 80px;
     background-color: rgb(224, 224, 241);
     border-radius: 15px;
@@ -155,7 +154,7 @@
     border-radius: 10px;
     background-color: #ffffff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     cursor: pointer;
     position: relative;
     overflow: hidden;
@@ -174,21 +173,70 @@
   }
 
   .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
 
-  .tablaContainer {
-    margin-top: 20px;
-    background-color: #ffffff;
-    padding: 15px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
+  /* Estilo para el contador en las tarjetas */
+.count {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 5px;
+}
 
+  /* Estilo para la tarjeta activa */
+.activeCard {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  border-width: 3px !important;
+}
+
+/* Transición suave para mostrar/ocultar tablas */
+.tablaContainer {
+  margin-top: 20px;
+  background-color: #ffffff;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Estilos para el enlace de encuesta */
+.surveyLink {
+  display: inline-block;
+  padding: 6px 12px;
+  background-color: #6f42c1;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.surveyLink:hover {
+  background-color: #5a32a3;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.surveyLink:active {
+  background-color: #4a2d8a;
+  transform: translateY(0);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
   table {
-    width: 100%;
+     width: 100%;
     border-collapse: collapse;
   }
 

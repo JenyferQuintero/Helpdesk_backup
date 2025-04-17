@@ -1,24 +1,19 @@
 .containerPrincipal {
-  width: 100vw;
-  height: 100vh;
-  margin: 0;
-  padding: 0;
-  overflow: auto;
-  /* o 'hidden' si no quieres scroll */
-  position: relative;
-  /* para posicionar hijos absolutos si es necesario */
-  display: flex;
-  /* opcional, para flexbox layout */
-  flex-direction: column;
-  /* opcional, para apilar hijos verticalmente */
-  box-sizing: border-box;
-  /* para incluir padding en el tamaño total */
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: auto; /* o 'hidden' si no quieres scroll */
+    position: relative; /* para posicionar hijos absolutos si es necesario */
+    display: flex; /* opcional, para flexbox layout */
+    flex-direction: column; /* opcional, para apilar hijos verticalmente */
+    box-sizing: border-box; /* para incluir padding en el tamaño total */
 }
 
-.containersuperadmin {
-  width: 93%;
-  margin: 9px auto 20px auto;
-  padding: 20px;
+.container {
+  width: calc(90% - 80px); /* Ajustar según el margen */
+  margin: 20px auto;
+  padding: 80px;
   background-color: rgb(224, 224, 241);
   border-radius: 15px;
   box-shadow: 15px 15px 15px rgba(15, 12, 207, 0.3);

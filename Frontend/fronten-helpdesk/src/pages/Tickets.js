@@ -9,9 +9,9 @@ import Logoempresarial from "../imagenes/logo empresarial.png";
 import ChatbotIcon from "../imagenes/img chatbot.png";
 import styles from "../styles/Tickets.module.css";
 
-// Datos de ejemplo más completos
+//Datos de ejemplo más completos
 const initialData = Array.from({ length: 100 }, (_, i) => ({
-  id: `2 503 290 ${(1000 - i).toString().padStart(3, '0')}`,
+  id: `2503290 ${(1000 - i).toString().padStart(3, '0')}`,
   titulo: `CREACION DE USUARIOS - PARALELO ACADEMICO ${i + 1}`,
   solicitante: ['Jenyfer Quintero Calixto',],
   descripcion: 'ALIMENTAR EL EXCEL DE DELOGIN',

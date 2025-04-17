@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Outlet, Link, useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
 // Iconos
 import { FaMagnifyingGlass, FaPowerOff } from "react-icons/fa6";
 import { FiAlignJustify } from "react-icons/fi";
@@ -25,23 +26,51 @@ const SolucionTickets = () => {
   const [solucion, setSolucion] = useState('');
   const [accion, setAccion] = useState('seguimiento');
   const [ticket, setTicket] = useState(null);
+  const [surveyEnabled, setSurveyEnabled] = useState(false);
+  const [surveyRating, setSurveyRating] = useState(0);
+  const [surveyComment, setSurveyComment] = useState('');
+  const [caseLink, setCaseLink] = useState('caso7ticket');
 
   useEffect(() => {
     // Aquí podrías hacer una llamada API para obtener los datos del ticket específico
     // Por ahora usaremos datos de ejemplo
-    const ticketEjemplo = {
-      id: id,
-      titulo: `CREACION DE USUARIOS - PARALELO ACADEMICO ${id.slice(-3)}`,
-      solicitante: 'Jenyfer Quintero Calixto',
-      descripcion: 'ALIMENTAR EL EXCEL DE DELOGIN',
-      fechaApertura: '2025-03-29 03:19',
-      ultimaActualizacion: '2025-03-29 03:40',
-      prioridad: 'Mediana',
-      estado: 'Abierto',
-      tecnico: 'Técnico Asignado',
-      grupo: 'EDQ B',
-      categoria: 'CREACION DE USUARIO'
-    };
+ // Simular datos del ticket si no se proporcionan
+ const [ticket, setTicket] = useState(ticketData || {
+  id: 'TKT-001',
+  title: 'Problema con el sistema de impresión',
+  description: 'El sistema no imprime correctamente los documentos largos',
+  status: 'Resuelto',
+  priority: 'Alta',
+  type: 'Técnico',
+  category: 'Impresión',
+  location: 'Oficina Central',
+  author: 'Usuario1',
+  assignedTo: 'Técnico1',
+  createdAt: '2023-05-10 09:30:00',
+  solvedAt: '2023-05-12 14:15:00',
+  history: [
+    {
+      date: '2023-05-10 09:30:00',
+      action: 'Ticket creado',
+      user: 'Usuario1'
+    },
+    {
+      date: '2023-05-10 10:15:00',
+      action: 'Asignado a Técnico1',
+      user: 'Admin1'
+    },
+    {
+      date: '2023-05-11 11:20:00',
+      action: 'Primera revisión realizada',
+      user: 'Técnico1'
+    },
+    {
+      date: '2023-05-12 14:15:00',
+      action: 'Problema resuelto',
+      user: 'Técnico1'
+    }
+  ]
+});
     setTicket(ticketEjemplo);
   }, [id]);
 
@@ -74,7 +103,18 @@ const SolucionTickets = () => {
 
   if (!ticket) return <div className={styles.loading}>Cargando ticket...</div>;
 
+  useEffect(() => {
+    // Habilitar encuesta si el ticket está resuelto
+    setSurveyEnabled(ticket.status === 'Resuelto');
+  }, [ticket.status]);
 
+  const handleSurveySubmit = (e) => {
+    e.preventDefault();
+    // Aquí iría la lógica para enviar la encuesta
+    alert(`Encuesta enviada: ${surveyRating} estrellas, Comentario: ${surveyComment}`);
+  };
+
+  const isAdminOrTech = ['admin', 'tecnico'].includes(userRole);
   // Handlers
 
   const nombre = localStorage.getItem("nombre");
