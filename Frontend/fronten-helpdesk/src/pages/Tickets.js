@@ -123,6 +123,8 @@ const Tickets = () => {
     setCurrentPage(1);
   };
 
+
+
   // Lógica de paginación
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
@@ -421,12 +423,20 @@ const Tickets = () => {
               {currentRows.map((item, index) => (
                 <tr key={index}>
                   <td>
-                    <Link to={`/tickets/solucion/${item.id}`} className={styles.linkTicket}>
+                    <Link
+                      to={`/tickets/solucion/${item.id}`}
+                      state={{ ticketData: item }}
+                      className={styles.linkTicket}
+                    >
                       {item.id}
                     </Link>
                   </td>
                   <td>
-                    <Link to={`/tickets/solucion/${item.id}`} className={styles.linkTicket}>
+                    <Link
+                      to={`/tickets/solucion/${item.id}`}
+                      state={{ ticketData: item }}
+                      className={styles.linkTicket}
+                    >
                       {item.titulo}
                     </Link>
                   </td>

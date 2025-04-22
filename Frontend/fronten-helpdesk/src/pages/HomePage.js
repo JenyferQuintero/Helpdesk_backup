@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import Logo from "../imagenes/logo proyecto color.jpeg";
 import Logoempresarial from "../imagenes/logo empresarial.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaMagnifyingGlass, FaPowerOff } from "react-icons/fa6";
 import { FiAlignJustify } from "react-icons/fi";
 import { FcHome, FcCustomerSupport, FcAnswers } from "react-icons/fc";
@@ -19,6 +19,18 @@ const HomePage = () => {
   const [activeTab, setActiveTab] = useState(null);
   const [searchResults, setSearchResults] = useState([]); // Estado añadido para resultados
   const [completedSurveys, setCompletedSurveys] = useState([]);
+  const [usuarios, setUsuarios] = useState([]);
+  const navigate = useNavigate();
+
+  const handleTicketClick = (ticket) => {
+    navigate('/CrearCasoUse', { 
+      state: { 
+        ticketData: ticket,
+        mode: 'edit' // Podemos usar este flag para diferenciar entre crear y editar
+      } 
+    });
+  };
+
 
 // Función para manejar resultados de búsqueda
 const onSearchResults = (results) => {
@@ -155,33 +167,38 @@ const onSearchResults = (results) => {
     setActiveTab(activeTab === tabKey ? null : tabKey);
   };
 
-  const renderTable = (data, title) => {
-    return (
-      <div className={styles.tablaContainer}>
-        <h2>{title.toUpperCase()}</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>SOLICITANTE</th>
-              <th>ELEMENTOS ASOCIADOS</th>
-              <th>DESCRIPCIÓN</th>
+ // Renderizado modificado de las tablas
+ const renderTable = (data, title) => {
+  return (
+    <div className={styles.tablaContainer}>
+      <h2>{title.toUpperCase()}</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>SOLICITANTE</th>
+            <th>ELEMENTOS ASOCIADOS</th>
+            <th>DESCRIPCIÓN</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((item, index) => (
+            <tr 
+              key={index} 
+              className={styles.clickableRow}
+              onClick={() => handleTicketClick(item)}
+            >
+              <td>ID: {item.id}</td>
+              <td>{item.solicitante}</td>
+              <td>{item.elementos}</td>
+              <td>{item.descripcion}</td>
             </tr>
-          </thead>
-          <tbody>
-            {data.map((item, index) => (
-              <tr key={index}>
-                <td>ID: {item.id}</td>
-                <td>{item.solicitante}</td>
-                <td>{item.elementos}</td>
-                <td>{item.descripcion}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    );
-  };
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
 
 
   return (

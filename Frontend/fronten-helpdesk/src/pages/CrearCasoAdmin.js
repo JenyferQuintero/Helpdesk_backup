@@ -1,14 +1,9 @@
 import React, { useState } from "react";
 import { Outlet, Link } from "react-router-dom";
-// Iconos
-// Iconos
 import { FaMagnifyingGlass, FaPowerOff } from "react-icons/fa6";
 import { FiAlignJustify } from "react-icons/fi";
 import { FcHome, FcAssistant, FcBusinessman, FcAutomatic, FcAnswers, FcCustomerSupport, FcExpired, FcGenealogy, FcBullish, FcConferenceCall, FcPortraitMode, FcOrganization } from "react-icons/fc";
-// Estilos
 import styles from "../styles/CrearCasoAdmin.module.css";
-
-// Imágenes
 import Logo from "../imagenes/logo proyecto color.jpeg";
 import Logoempresarial from "../imagenes/logo empresarial.png";
 import ChatbotIcon from "../imagenes/img chatbot.png";

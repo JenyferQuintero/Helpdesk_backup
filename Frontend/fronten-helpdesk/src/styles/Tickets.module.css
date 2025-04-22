@@ -977,7 +977,26 @@ tr:hover {
 }
 
 .tableContainer {
-  overflow-x: hidden;
+  margin-top: 20px;
+  width: 100%;
+  overflow-x: auto;
+}
+
+.tablaContainer table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tablaContainer th, 
+.tablaContainer td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.tablaContainer th {
+  background-color: #f8f9fa;
+  font-weight: 600;
 }
 
 .priority {
@@ -1174,4 +1193,13 @@ tr:hover {
 .linkTicket:hover {
   color: #2a0a8a;
   text-decoration: underline;
+}
+
+.clickableRow {
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.clickableRow:hover {
+  background-color: #f5f5f5;
 }
