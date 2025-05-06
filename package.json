@@ -1,6 +1,8 @@
 {
   "dependencies": {
     "dotenv": "^16.5.0",
+    "i18next": "^25.0.2",
+    "react-i18next": "^15.5.1",
     "use-debounce": "^10.0.4"
   }
 }

@@ -1,12 +1,9 @@
 import React, { useState } from "react";
 import { Outlet, Link } from "react-router-dom";
-// Iconos
 import { FaMagnifyingGlass, FaPowerOff } from "react-icons/fa6";
 import { FiAlignJustify } from "react-icons/fi";
 import { FcHome, FcAssistant, FcBusinessman, FcAutomatic, FcAnswers, FcCustomerSupport, FcExpired, FcGenealogy, FcBullish, FcConferenceCall, FcPortraitMode, FcOrganization } from "react-icons/fc";
-// Estilos
 import styles from "../styles/Superadmin.module.css";
-// Imágenes
 import Logo from "../imagenes/logo proyecto color.jpeg";
 import Logoempresarial from "../imagenes/logo empresarial.png";
 import ChatbotIcon from "../imagenes/img chatbot.png";
@@ -21,19 +18,15 @@ const SuperadminLayout = () => {
   const [isConfigOpen, setIsConfigOpen] = useState(false);
 
   // Handlers
-
   const nombre = localStorage.getItem("nombre");
-  
   const toggleChat = () => setIsChatOpen(!isChatOpen);
   const toggleMenu = () => setIsMenuExpanded(!isMenuExpanded);
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
-
   const toggleSupport = () => {
     setIsSupportOpen(!isSupportOpen);
     setIsAdminOpen(false);
     setIsConfigOpen(false);
   };
-
   const toggleAdmin = () => {
     setIsAdminOpen(!isAdminOpen);
     setIsSupportOpen(false);

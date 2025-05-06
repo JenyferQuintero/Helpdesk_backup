@@ -2,12 +2,80 @@ import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import Logo from "../imagenes/logo proyecto color.jpeg";
 import Logoempresarial from "../imagenes/logo empresarial.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { FaMagnifyingGlass, FaPowerOff } from "react-icons/fa6";
 import { FiAlignJustify } from "react-icons/fi";
 import { FcHome, FcCustomerSupport, FcAnswers } from "react-icons/fc";
 import ChatbotIcon from "../imagenes/img chatbot.png";
 import styles from "../styles/HomePage.module.css";
+
+const Breadcrumbs = () => {
+  const location = useLocation();
+  
+  // Mapeo completo de rutas a nombres legibles
+  const pathNameMap = {
+    'home': 'Inicio',
+    'CrearCasoUse': 'Crear Caso',
+    'Tickets': 'Tickets',
+    'EncuestaSatisfaccion': 'Encuesta de Satisfacción',
+    'SolucionTickets': 'Solución de Tickets',
+    // Agrega más rutas según necesites
+  };
+
+  // Función para formatear nombres de ruta
+  const formatCrumbName = (crumb) => {
+    // Primero verifica si está en el mapeo
+    if (pathNameMap[crumb]) return pathNameMap[crumb];
+    
+    // Lógica para rutas dinámicas (como IDs)
+    if (/^\d+$/.test(crumb)) return `#${crumb}`;
+    
+    // Formato por defecto: reemplaza guiones y capitaliza
+    return crumb
+      .replace(/-/g, ' ')
+      .replace(/\b\w/g, l => l.toUpperCase());
+  };
+
+  let currentLink = '';
+  const crumbs = location.pathname.split('/')
+    .filter(crumb => crumb !== '')
+    .map((crumb, index, array) => {
+      currentLink += `/${crumb}`;
+      
+      // Es el último elemento? (no será clickable)
+      const isLast = index === array.length - 1;
+      
+      return (
+        <div className={styles.crumb} key={crumb}>
+          {isLast ? (
+            <span>{formatCrumbName(crumb)}</span>
+          ) : (
+            <Link to={currentLink}>{formatCrumbName(crumb)}</Link>
+          )}
+          {!isLast && <span className={styles.separator}>/</span>}
+        </div>
+      );
+    });
+
+  return (
+    <div className={styles.breadcrumbs}>
+      {crumbs.length > 0 ? (
+        <>
+          <div className={styles.crumb}>
+            <Link to="/home">Inicio</Link>
+            {crumbs.length > 0 && <span className={styles.separator}>/</span>}
+          </div>
+          {crumbs}
+        </>
+      ) : (
+        <div className={styles.crumb}>
+          <span>Inicio</span>
+        </div>
+      )}
+    </div>
+  );
+};
+
 
 const HomePage = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -21,6 +89,7 @@ const HomePage = () => {
   const [completedSurveys, setCompletedSurveys] = useState([]);
   const [usuarios, setUsuarios] = useState([]);
   const navigate = useNavigate();
+  
 
   const handleTicketClick = (ticket) => {
     navigate('/CrearCasoUse', { 
@@ -250,6 +319,8 @@ const onSearchResults = (results) => {
             <span>Inicio</span>
           </Link>
         </div>
+
+
         <div className={styles.inputContainer}>
           <div className={styles.searchContainer}>
             <input

@@ -1,12 +1,13 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AuthProvider } from './context/AuthContext';
+import { styles } from './App.css';
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import CrearCasoUse from "./pages/CrearCasoUse";
 import HomeAdmiPage from "./pages/HomeAdmiPage";
 import Tickets from "./pages/Tickets";
 import Superadmin from "./pages/Superadmin";
-import SuperadminLayout from "./pages/SuperadminLayout";
 import CrearCasoAdmin from "./pages/CrearCasoAdmin";
 import Problemas from "./pages/Problemas";
 import Estadisticas from "./pages/Estadisticas";
@@ -18,8 +19,10 @@ import SolucionTickets from "./pages/SolucionTickets";
 import EncuestaSatisfaccion from "./pages/EncuestaSatisfaccion";
 
 
+
 function App() {
   return (
+    <AuthProvider>
     <Router>
       <Routes>
         <Route path="/" element={<LoginPage />} />
@@ -41,6 +44,7 @@ function App() {
     
       </Routes>
     </Router>
+    </AuthProvider>
   );
 }
 

@@ -745,3 +745,69 @@
     transform: scale(1.01);
     z-index: 1;
   }
+
+  /* Breadcrumbs styles */
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 0 15px;
+  font-size: 14px;
+  color: white;
+  flex-grow: 1;
+  margin: 0 15px;
+}
+
+.crumb {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.crumb a {
+  color: white;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+}
+
+.crumb a:hover {
+  color: #ddd;
+  text-decoration: underline;
+}
+
+.crumb span {
+  color: white;
+  opacity: 0.9;
+  white-space: nowrap;
+}
+
+.separator {
+  margin: 0 4px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Ajustes para el header */
+.containerInicio {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #3a0ca3;
+  border-bottom: 1px solid #ccc;
+  transition: margin-left 0.3s ease;
+}
+
+.containerInicioImg {
+  display: flex;
+  align-items: center;
+  min-width: 120px; /* Asegura espacio para el botón de inicio */
+}
+
+.inputContainer {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  min-width: 300px; /* Asegura espacio para la barra de búsqueda */
+}
