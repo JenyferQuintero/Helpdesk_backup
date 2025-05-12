@@ -381,7 +381,7 @@
 .menuVertical {
   width: 60px;
   height: 100vh;
-  background-color: #023e8a;
+  background-color: #3a0ca3;
   color: white;
   position: fixed;
   top: 0;
@@ -1103,5 +1103,614 @@
   .optionsColumn {
     flex: 1 1 100%;
     width: 100%;
+  }
+}
+
+
+/*logo empresarial*/
+
+.menuLogoEmpresarial {
+  text-align: center;
+  position: absolute;
+  bottom: 20px; 
+  left: 0;
+  right: 0;
+  opacity: 0.6;
+  transition: all 0.3s ease;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 0 auto; /* Centrado horizontal */
+
+}
+
+.menuLogoEmpresarial img {
+  max-width: 80%; /* Reducir tamaño para mejor ajuste */
+  height: auto;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  display: block;
+  margin: 0 auto; /* Centrado horizontal para la imagen */
+}
+
+.menuLogoEmpresarial:hover {
+  opacity: 1;
+}
+
+.menuLogoEmpresarial:hover img {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Ajustes para el contenedor del menú */
+.menuVerticalDesplegable {
+  position: relative; /* Necesario para el posicionamiento absoluto del logo */
+  height: 100%;
+ 
+}
+
+.menuIconos {
+  height: calc(100% - 80px); /* Ajustar altura considerando el logo */
+  
+}
+
+/* Ajustes para móvil */
+@media (max-width: 768px) {
+  .menuLogoEmpresarial {
+    position: static; /* Cambiar a flujo normal en móvil */
+    margin-top: 20px;
+    width: 100%;
+    border-top: none;
+  }
+  
+  .menuVerticalDesplegable {
+    padding-bottom: 0;
+  }
+  
+  .menuIconos {
+    height: auto;
+  }
+}
+  
+  /* Eliminar el logo empresarial flotante si existe */
+  .floatingLogo {
+    display: none;
+  }
+  
+  /* Ajustes para móvil */
+  @media (max-width: 768px) {
+    .menuLogoEmpresarial {
+      display: none; /* Ocultar en móvil si es necesario */
+    }
+    
+    .menuVerticalDesplegable.mobileMenuOpen .menuLogoEmpresarial {
+      display: block; /* Mostrar cuando el menú móvil está abierto */
+      margin-top: 20px;
+  
+    }
+  }
+
+  .loadingSpinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+  
+
+/*css de tickethistorial*/
+
+.container {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.backButton {
+  padding: 0.5rem 1rem;
+  background-color: #3a0ca3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s;
+}
+
+.backButton:hover {
+  background-color: #2a0a8a;
+}
+
+.historyContainer {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.historyList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.historyItem {
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #3a0ca3;
+}
+
+.itemHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.date {
+  font-weight: 600;
+}
+
+.user {
+  background-color: #3a0ca3;
+  color: white;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+.changes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.change {
+  background-color: white;
+  padding: 0.5rem;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.field {
+  font-weight: 600;
+  margin-right: 0.5rem;
+  color: #3a0ca3;
+}
+
+.comment {
+  padding: 0.8rem;
+  background-color: #e9ecef;
+  border-radius: 4px;
+  font-style: italic;
+}
+
+.empty {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+  font-style: italic;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #3a0ca3;
+}
+
+.error {
+  text-align: center;
+  padding: 2rem;
+  color: #dc3545;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .changes {
+    grid-template-columns: 1fr;
+  }
+}
+
+.container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.headerTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.ticketInfo {
+  margin-bottom: 1.5rem;
+}
+
+.ticketInfo h2 {
+  color: #555;
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.metaInfo {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.filterBar {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.searchBox {
+  position: relative;
+  flex-grow: 1;
+  max-width: 300px;
+}
+
+.searchBox input {
+  width: 100%;
+  padding: 0.5rem 1rem 0.5rem 2rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 0.7rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+}
+
+.filterToggle, .applyButton, .resetButton {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.filterToggle {
+  background-color: #e0e0ff;
+  color: #3a0ca3;
+}
+
+.applyButton {
+  background-color: #3a0ca3;
+  color: white;
+}
+
+.resetButton {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.advancedFilters {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  border: 1px solid #eee;
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.filterGroup label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  margin-bottom: 0.3rem;
+  color: #555;
+}
+
+.filterGroup input, .filterGroup select {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.exportButtons {
+  display: flex;
+  gap: 1rem;
+}
+
+.exportButton {
+  padding: 0.5rem 1rem;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.historyContainer {
+  margin-top: 1rem;
+}
+
+.emptyMessage {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+  font-style: italic;
+}
+
+.timeline {
+  position: relative;
+  padding-left: 30px;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: #3a0ca3;
+}
+
+.timelineItem {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.timelineHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.timelineDot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: #3a0ca3;
+  position: absolute;
+  left: -30px;
+}
+
+.timelineDate {
+  font-weight: 600;
+  color: #333;
+}
+
+.timelineUser {
+  background-color: #e0e0ff;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  color: #3a0ca3;
+}
+
+.timelineContent {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 6px;
+}
+
+.changeItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding: 0.3rem;
+  flex-wrap: wrap;
+}
+
+.changeField {
+  font-weight: 600;
+  min-width: 120px;
+  color: #3a0ca3;
+}
+
+.oldValue {
+  text-decoration: line-through;
+  color: #f44336;
+  background-color: #ffebee;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+}
+
+.newValue {
+  color: #4caf50;
+  background-color: #e8f5e9;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+}
+
+.arrow {
+  color: #999;
+}
+
+.comment {
+  margin-top: 1rem;
+  padding: 0.8rem;
+  background-color: #e3f2fd;
+  border-radius: 4px;
+  color: #1565c0;
+}
+
+.paginationControls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.paginationControls button {
+  padding: 0.5rem 1rem;
+  background-color: #3a0ca3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.paginationControls button:disabled {
+  background-color: #b0b0b0;
+  cursor: not-allowed;
+}
+
+.paginationControls select {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.footer {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.backButton {
+  padding: 0.7rem 1.5rem;
+  background-color: #3a0ca3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+}
+
+.backButton:hover {
+  background-color: #2a0a8a;
+}
+
+.loadingContainer {
+  text-align: center;
+  padding: 3rem;
+}
+
+.spinner {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(58, 12, 163, 0.2);
+  border-radius: 50%;
+  border-top-color: #3a0ca3;
+  animation: spin 1s ease-in-out infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.errorContainer {
+  text-align: center;
+  padding: 2rem;
+  color: #d32f2f;
+  background-color: #ffebee;
+  border-radius: 8px;
+  max-width: 600px;
+  margin: 2rem auto;
+}
+
+.errorContainer h2 {
+  margin-top: 0;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  
+  .headerTop {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .exportButtons {
+    width: 100%;
+    flex-direction: column;
+  }
+  
+  .exportButton {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .filterBar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .searchBox {
+    max-width: 100%;
+  }
+  
+  .changeItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
+  }
+  
+  .changeField {
+    min-width: 100%;
+    margin-bottom: 0.3rem;
   }
 }

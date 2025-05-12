@@ -13,3 +13,5 @@ app.register_blueprint(usuarios_bp, url_prefix="/usuarios")
 if __name__ == "__main__":
     app.run(debug=True)
 
+    
+

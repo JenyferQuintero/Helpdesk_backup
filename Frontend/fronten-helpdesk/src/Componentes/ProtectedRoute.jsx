@@ -1,32 +1,22 @@
-import React, { useContext } from 'react';
-import { Route, Redirect } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
-import { getRouteConfig } from '../config/routes';
+import React from 'react';
+import { useLocation, Navigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
-const ProtectedRoute = ({ component: Component, ...rest }) => {
-  const { authState } = useContext(AuthContext);
-  const routeConfig = getRouteConfig(rest.path);
+const ProtectedRoute = ({ children, allowedRoles }) => {
+  const { user } = useAuth();
+  const location = useLocation();
 
-  return (
-    <Route
-      {...rest}
-      render={(props) => {
-        if (!routeConfig?.protected) {
-          return <Component {...props} />;
-        }
+  if (!user) {
+    // Redirige a /login pero guarda la ubicación actual para volver después del login
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
 
-        if (!authState.isAuthenticated) {
-          return <Redirect to="/login" />;
-        }
+  if (!allowedRoles.includes(user.role)) {
+    // Redirige a página no autorizada si el rol no coincide
+    return <Navigate to="/unauthorized" replace />;
+  }
 
-        if (routeConfig.roles && !routeConfig.roles.includes(authState.user.role)) {
-          return <Redirect to="/not-authorized" />;
-        }
-
-        return <Component {...props} />;
-      }}
-    />
-  );
+  return children;
 };
 
 export default ProtectedRoute;

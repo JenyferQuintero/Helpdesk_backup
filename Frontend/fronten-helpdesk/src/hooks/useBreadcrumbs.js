@@ -1,4 +1,15 @@
 import { getRouteConfig } from '../config/routes';
+import { useNavigate } from 'react-router-dom';
+
+export const useSafeNavigate = () => {
+  const navigate = useNavigate();
+  
+  return (path) => {
+    if (typeof path === 'string') {
+      navigate(path);
+    }
+  };
+};
 
 export const useBreadcrumbs = (pathname) => {
   const paths = pathname.split('/').filter(Boolean);
