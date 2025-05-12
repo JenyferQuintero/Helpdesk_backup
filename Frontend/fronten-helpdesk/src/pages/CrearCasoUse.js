@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
-import { Outlet, Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation, useParams } from "react-router-dom";
 import Logo from "../imagenes/logo proyecto color.jpeg";
 import Logoempresarial from "../imagenes/logo empresarial.png";
 import { FaMagnifyingGlass, FaPowerOff } from "react-icons/fa6";
@@ -60,7 +60,7 @@ const CrearCasoUse = () => {
 
   // Estado del formulario
   const [formData, setFormData] = useState({
-    id: '',
+    id: "",
     tipo: "",
     origen: "",
     prioridad: "",
@@ -68,8 +68,8 @@ const CrearCasoUse = () => {
     titulo: "",
     descripcion: "",
     archivo: null,
-    solicitante: nombre || '',
-    elementos: ""
+    solicitante: nombre || "",
+    elementos: "",
   });
 
   // Obtener datos iniciales al cargar el componente
@@ -77,23 +77,29 @@ const CrearCasoUse = () => {
     const fetchInitialData = async () => {
       try {
         // Obtener usuarios
-        const usuariosResponse = await axios.get('http://localhost:5000/api/usuarios');
+        const usuariosResponse = await axios.get(
+          "http://localhost:5000/usuarios/obtener"
+        );
         setUsuarios(usuariosResponse.data);
 
         // Obtener departamentos
-        const deptosResponse = await axios.get('http://localhost:5000/api/departamentos');
+        const deptosResponse = await axios.get(
+          "http://localhost:5000/usuarios/obtenerEntidades"
+        );
         setDepartamentos(deptosResponse.data);
 
         // Obtener categorías
-        const catsResponse = await axios.get('http://localhost:5000/api/categorias');
+        const catsResponse = await axios.get(
+          "http://localhost:5000/usuarios/obtenerCategorias"
+        );
         setCategorias(catsResponse.data);
-
+        
 
         // Cargar datos del ticket si estamos en modo edición
         if (location.state?.ticketData) {
-          setFormData(prev => ({
+          setFormData((prev) => ({
             ...prev,
-            ...location.state.ticketData
+            ...location.state.ticketData,
           }));
         }
       } catch (error) {
@@ -105,16 +111,16 @@ const CrearCasoUse = () => {
     fetchInitialData();
   }, [location.state]);
 
-
+  
 
 
   // Manejo de cambios en el formulario
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-
+    
     setFormData(prev => ({
       ...prev,
-      [name]: files ? files[0] : value
+      [name]: files ? files[0] : value,
     }));
   };
 
@@ -127,28 +133,36 @@ const CrearCasoUse = () => {
 
     try {
       const formDataToSend = new FormData();
-      Object.entries(formData).forEach(([key, value]) => {
-        if (value !== null && value !== undefined) {
-          formDataToSend.append(key, value);
-        }
-      });
-
-      if (location.state?.mode === 'edit') {
-        await axios.put(`http://localhost:5000/api/tickets/${formData.id}`, formDataToSend, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
-        setSuccess('Ticket actualizado correctamente');
-      } else {
-        await axios.post('http://localhost:5000/api/tickets', formDataToSend, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
-        setSuccess('Ticket creado correctamente');
+      formDataToSend.append("prioridad", formData.prioridad);
+      formDataToSend.append("titulo", formData.titulo);
+      formDataToSend.append("descripcion", formData.descripcion);
+      formDataToSend.append("origen", formData.origen);
+      if (formData.archivo) {
+        formDataToSend.append("archivo", formData.archivo);
       }
 
-      setTimeout(() => navigate('/Tickets'), 2000);
+      if (location.state?.mode === "edit") {
+        await axios.put(
+          `http://localhost:5000/usuarios/tickets${formData.id}`,
+          formDataToSend,
+          {}
+        );
+        setSuccess("Ticket actualizado correctamente");
+      } else {
+        await axios.post(
+          "http://localhost:5000/usuarios/tickets",
+          formDataToSend,
+          {}
+        );
+        setSuccess("Ticket creado correctamente");
+      }
+
+      setTimeout(() => navigate("/Tickets"), 2000);
     } catch (error) {
-      console.error('Error al procesar el ticket:', error);
-      setError(error.response?.data?.detail || 'Error al procesar la solicitud');
+      console.error("Error al procesar el ticket:", error);
+      setError(
+        error.response?.data?.detail || "Error al procesar la solicitud"
+      );
     } finally {
       setIsLoading(false);
     }
@@ -203,7 +217,9 @@ const CrearCasoUse = () => {
     <div className={styles.containerPrincipal}>
       {/* Menú Vertical */}
       <aside
-        className={`${styles.menuVertical} ${isMenuExpanded ? styles.expanded : ""}`}
+        className={`${styles.menuVertical} ${
+          isMenuExpanded ? styles.expanded : ""
+        }`}
         onMouseEnter={toggleMenu}
         onMouseLeave={toggleMenu}
       >
@@ -219,7 +235,6 @@ const CrearCasoUse = () => {
           >
             <FiAlignJustify className={styles.menuIcon} />
           </button>
-
           <div className={`${styles.menuVerticalDesplegable} ${isMobileMenuOpen ? styles.mobileMenuOpen : ''}`}>
             <ul className={styles.menuIconos}>
               {/* Opción Inicio - visible para todos */}
@@ -346,7 +361,10 @@ const CrearCasoUse = () => {
         <Outlet />
       </div>
       {/* Header */}
-      <header className={styles.containerInicio} style={{ marginLeft: isMenuExpanded ? "200px" : "60px" }}>
+      <header
+        className={styles.containerInicio}
+        style={{ marginLeft: isMenuExpanded ? "200px" : "60px" }}
+      >
         <div className={styles.containerInicioImg}>
           <Link to={getRouteByRole('inicio')} className={styles.linkSinSubrayado}>
             <FcHome className={styles.menuIcon} />
@@ -355,18 +373,8 @@ const CrearCasoUse = () => {
         </div>
         <div className={styles.inputContainer}>
           <div className={styles.searchContainer}>
-            <input
-              className={styles.search}
-              type="text"
-              placeholder="Buscar..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <button
-              className={styles.buttonBuscar}
-              title="Buscar"
-              disabled={isLoading || !searchTerm.trim()}
-            >
+            <input className={styles.search} type="text" placeholder="Buscar" />
+            <button type="submit" className={styles.buttonBuscar} title="Buscar">
               <FaMagnifyingGlass className={styles.searchIcon} />
             </button>
             {isLoading && <span className={styles.loading}>Buscando...</span>}
@@ -375,7 +383,7 @@ const CrearCasoUse = () => {
 
 
           <div className={styles.userContainer}>
-            <span className={styles.username}>Bienvenido, {nombre}</span>
+            <span className={styles.username}>Bienvenido, <span id="nombreusuario">{nombre}</span></span>
             <div className={styles.iconContainer}>
               <Link to="/">
                 <FaPowerOff className={styles.icon} />
@@ -389,7 +397,7 @@ const CrearCasoUse = () => {
 
       {/* Contenido Principal */}
       <div className={styles.containercaso} style={{ marginLeft: isMenuExpanded ? "200px" : "60px" }}>
-
+        
         <div className={styles.sectionContainer}>
           <div className={styles.ticketContainer}>
             <ul className={styles.creacion}>
@@ -397,7 +405,9 @@ const CrearCasoUse = () => {
                 <Link to="/CrearCasoUse" className={styles.linkSinSubrayado}>
                   <FcCustomerSupport className={styles.menuIcon} />
                   <span className={styles.creacionDeTicket}>
-                    {location.state?.mode === 'edit' ? 'Editar Ticket' : 'Crear Nuevo Ticket'}
+                    {location.state?.mode === "edit"
+                      ? "Editar Ticket"
+                      : "Crear Nuevo Ticket"}
                   </span>
                 </Link>
               </li>
@@ -409,34 +419,44 @@ const CrearCasoUse = () => {
         {error && (
           <div className={styles.errorMessage}>
             {error}
-            <button onClick={() => setError(null)} className={styles.closeMessage}>&times;</button>
+            <button
+              onClick={() => setError(null)}
+              className={styles.closeMessage}
+            >
+              &times;
+            </button>
           </div>
         )}
         {success && (
           <div className={styles.successMessage}>
             {success}
-            <button onClick={() => setSuccess(null)} className={styles.closeMessage}>&times;</button>
+            <button
+              onClick={() => setSuccess(null)}
+              className={styles.closeMessage}
+            >
+              &times;
+            </button>
           </div>
         )}
 
-
-
-        {/* Formulario */}
-        <div className={styles.formColumn}>
-          <div className={styles.formContainerCaso}>
-            <form onSubmit={handleSubmit}>
-              {location.state?.mode === 'edit' && (
-                <div className={styles.formGroupCaso}>
-                  <label className={styles.casoLabel}>ID</label>
-                  <input
-                    className={styles.casoInput}
-                    type="text"
-                    name="id"
-                    value={formData.id}
-                    readOnly
-                  />
-                </div>
-              )}
+       
+        
+          {/* Formulario */}
+          <div className={styles.formColumn}>
+            <div className={styles.formContainerCaso}>
+              <form onSubmit={handleSubmit}>
+                {location.state?.mode === 'edit' && (
+                  <div className={styles.formGroupCaso}>
+                    <label className={styles.casoLabel}>ID</label>
+                    <input
+                      className={styles.casoInput}
+                      type="text"
+                      name="id"
+                      value={formData.id}
+                      readOnly
+                    />
+                  </div>
+                )}
 
               <div className={styles.formGroupCaso}>
                 <label className={styles.casoLabel}>Tipo*</label>
@@ -453,24 +473,24 @@ const CrearCasoUse = () => {
                 </select>
               </div>
 
-              {/* Campo Origen con datos dinámicos */}
-              <div className={styles.formGroupCaso}>
-                <label className={styles.casoLabel}>Origen*</label>
-                <select
-                  className={styles.casoSelect}
-                  name="origen"
-                  value={formData.origen}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">Seleccione...</option>
-                  {departamentos.map(depto => (
-                    <option key={depto.id} value={depto.nombre}>
-                      {depto.nombre}
-                    </option>
-                  ))}
-                </select>
-              </div>
+                {/* Campo Origen con datos dinámicos */}
+                <div className={styles.formGroupCaso}>
+                  <label className={styles.casoLabel}>Origen*</label>
+                  <select
+                    className={styles.casoSelect}
+                    name="origen"
+                    value={formData.origen}
+                    onChange={handleChange}
+                    required
+                  >
+                    <option value="">Seleccione...</option>
+                    {departamentos.map(depto => (
+                      <option key={depto.id} value={depto.nombre}>
+                        {depto.nombre}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
               <div className={styles.formGroupCaso}>
                 <label className={styles.casoLabel}>Prioridad*</label>
@@ -488,24 +508,24 @@ const CrearCasoUse = () => {
                 </select>
               </div>
 
-              {/* Campo Categoría con datos dinámicos */}
-              <div className={styles.formGroupCaso}>
-                <label className={styles.casoLabel}>Categoría*</label>
-                <select
-                  className={styles.casoSelect}
-                  name="categoria"
-                  value={formData.categoria}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">Seleccione...</option>
-                  {categorias.map(cat => (
-                    <option key={cat.id} value={cat.nombre}>
-                      {cat.nombre}
-                    </option>
-                  ))}
-                </select>
-              </div>
+                {/* Campo Categoría con datos dinámicos */}
+                <div className={styles.formGroupCaso}>
+                  <label className={styles.casoLabel}>Categoría*</label>
+                  <select
+                    className={styles.casoSelect}
+                    name="categoria"
+                    value={formData.categoria}
+                    onChange={handleChange}
+                    required
+                  >
+                    <option value="">Seleccione...</option>
+                    {categorias.map(cat => (
+                      <option key={cat.id} value={cat.nombre}>
+                        {cat.nombre}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
               <div className={styles.formGroupCaso}>
                 <label className={styles.casoLabel}>Título*</label>
@@ -519,23 +539,23 @@ const CrearCasoUse = () => {
                 />
               </div>
 
-              <div className={styles.formGroupCaso}>
-                <label className={styles.casoLabel}>Solicitante*</label>
-                <select
-                  className={styles.casoSelect}
-                  name="solicitante"
-                  value={formData.solicitante}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">Seleccione un usuario...</option>
-                  {usuarios.map(usuario => (
-                    <option key={usuario.id} value={`${usuario.nombres} ${usuario.apellidos}`}>
-                      {`${usuario.nombres} ${usuario.apellidos}`} ({usuario.email})
-                    </option>
-                  ))}
-                </select>
-              </div>
+                <div className={styles.formGroupCaso}>
+                  <label className={styles.casoLabel}>Solicitante*</label>
+                  <select
+                    className={styles.casoSelect}
+                    name="solicitante"
+                    value={formData.solicitante}
+                    onChange={handleChange}
+                    required
+                  >
+                    <option value="">Seleccione un usuario...</option>
+                    {usuarios.map(usuario => (
+                      <option key={usuario.id} value={`${usuario.nombres} ${usuario.apellidos}`}>
+                        {`${usuario.nombres} ${usuario.apellidos}`} ({usuario.email})
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
               <div className={styles.formGroupCaso}>
                 <label className={styles.casoLabel}>Elementos Asociados</label>
@@ -560,36 +580,36 @@ const CrearCasoUse = () => {
                 />
               </div>
 
-              <div className={styles.formGroupCaso}>
-                <label className={styles.casoLabel}>Adjuntar archivo</label>
-                <input
-                  className={styles.casoFile}
-                  type="file"
-                  name="archivo"
-                  onChange={handleChange}
-                />
-                {formData.archivo && (
-                  <span className={styles.fileName}>{formData.archivo.name}</span>
-                )}
-              </div>
+                <div className={styles.formGroupCaso}>
+                  <label className={styles.casoLabel}>Adjuntar archivo</label>
+                  <input
+                    className={styles.casoFile}
+                    type="file"
+                    name="archivo"
+                    onChange={handleChange}
+                  />
+                  {formData.archivo && (
+                    <span className={styles.fileName}>{formData.archivo.name}</span>
+                  )}
+                </div>
 
-              <button
-                type="submit"
-                className={styles.submitButton}
-                disabled={isLoading || !validateForm()}
-              >
-                {isLoading ? (
-                  <span className={styles.loadingSpinner}></span>
-                ) : (
-                  location.state?.mode === 'edit' ? 'Actualizar Ticket' : 'Crear Ticket'
-                )}
-              </button>
-            </form>
+                <button
+                  type="submit"
+                  className={styles.submitButton}
+                  disabled={isLoading || !validateForm()}
+                >
+                  {isLoading ? (
+                    <span className={styles.loadingSpinner}></span>
+                  ) : (
+                    location.state?.mode === 'edit' ? 'Actualizar Ticket' : 'Crear Ticket'
+                  )}
+                </button>
+              </form>
+            </div>
           </div>
-        </div>
 
-
-
+          
+       
       </div>
       {/* Chatbot */}
       <div className={styles.chatbotContainer}>
@@ -621,4 +641,4 @@ const CrearCasoUse = () => {
   );
 };
 
-export default CrearCasoUse;
+      export default CrearCasoUse;
