@@ -469,7 +469,7 @@ const HomePage = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <button
+          <button
               className={styles.buttonBuscar}
               title="Buscar"
               disabled={isLoading || !searchTerm.trim()}

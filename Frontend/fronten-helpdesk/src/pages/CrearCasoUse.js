@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
-import { Link, useNavigate, useLocation, useParams } from "react-router-dom";
+import { Link, useNavigate, Outlet, useLocation, useParams } from "react-router-dom";
 import Logo from "../imagenes/logo proyecto color.jpeg";
 import Logoempresarial from "../imagenes/logo empresarial.png";
 import { FaMagnifyingGlass, FaPowerOff } from "react-icons/fa6";

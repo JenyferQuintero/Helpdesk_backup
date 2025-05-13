@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, Outlet, useNavigate, useLocation, navigate  } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import { FaMagnifyingGlass, FaPowerOff } from "react-icons/fa6";
 import { FiAlignJustify } from "react-icons/fi";
 import { FcHome, FcAssistant, FcBusinessman, FcAutomatic, FcAnswers, FcCustomerSupport, FcExpired, FcGenealogy, FcBullish, FcConferenceCall, FcPortraitMode, FcOrganization } from "react-icons/fc";
@@ -8,12 +8,10 @@ import Logoempresarial from "../imagenes/logo empresarial.png";
 import ChatbotIcon from "../imagenes/img chatbot.png";
 import styles from "../styles/Superadmin.module.css";
 
-
-
 const Superadmin = () => {
 
   // Estados
- const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
   const [activeView, setActiveView] = useState("personal");
   const [isSupportOpen, setIsSupportOpen] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
@@ -21,39 +19,45 @@ const Superadmin = () => {
   const [isMenuExpanded, setIsMenuExpanded] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
-  
-  const navigate = useNavigate();
-  const userRole = localStorage.getItem("rol") || "";
+
+  // Obtener datos del usuario
   const nombre = localStorage.getItem("nombre");
+  const userRole = localStorage.getItem("rol") || "";
+
 
   // Datos
   const tickets = [
     { label: "Nuevo", color: "green", icon: "🟢", count: 0 },
-    { label: "En curso (asignada)", color: "lightgreen", icon: "⭕", count: 0 },
-    { label: "En curso (planificada)", color: "#4169E1", icon: "📅", count: 0 },
+    { label: "En curso (asignada)", color: "lightgreen", icon: "📅", count: 0 },
     { label: "En espera", color: "orange", icon: "🟡", count: 0 },
     { label: "Resueltas", color: "gray", icon: "⚪", count: 0 },
     { label: "Cerrado", color: "black", icon: "⚫", count: 0 },
     { label: "Borrado", color: "red", icon: "🗑", count: 0 },
+    { icon: "📝", label: "Abiertos", count: 5, color: "#4CAF50" },
+    { icon: "⏳", label: "En curso", count: 3, color: "#FFC107" },
+    { icon: "✅", label: "Cerrados", count: 12, color: "#2196F3" },
+    { icon: "⚠️", label: "Pendientes", count: 2, color: "#FF5722" },
+    { icon: "🔧", label: "En solución", count: 1, color: "#9C27B0" },
+    { icon: "✔️", label: "Resueltos", count: 4, color: "#607D8B" },
   ];
 
   const problems = [
     { label: "Nuevo", color: "green", icon: "🟢", count: 0 },
     { label: "Aceptado", color: "#008000", icon: "✔", count: 0 },
-    { label: "En curso (asignada)", color: "lightgreen", icon: "⭕", count: 0 },
-    { label: "En curso (planificada)", color: "#4169E1", icon: "📅", count: 0 },
+    { label: "En curso (asignada)", color: "lightgreen", icon: "📅", count: 0 },
     { label: "En espera", color: "orange", icon: "🟡", count: 0 },
     { label: "Resueltas", color: "gray", icon: "⚪", count: 0 },
     { label: "Bajo observación", color: "black", icon: "👁", count: 0 },
     { label: "Cerrado", color: "black", icon: "⚫", count: 0 },
     { label: "Borrado", color: "red", icon: "🗑", count: 0 },
-  ];
- 
-  // Handlers
 
+  ];
+
+
+
+  // Handlers
 
   const toggleChat = () => setIsChatOpen(!isChatOpen);
 
@@ -83,41 +87,16 @@ const Superadmin = () => {
   const toggleMenu = () => setIsMenuExpanded(!isMenuExpanded);
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
-  // Función para obtener ruta por rol
-  const getRouteByRole = (section) => {
-    if (section === 'inicio') {
-      if (userRole === 'administrador') return '/Superadmin';
-      if (userRole === 'tecnico') return '/HomeAdmiPage';
-      return '/home';
-    }
-    else if (section === 'crear-caso') {
-      if (userRole === 'administrador' || userRole === 'tecnico') return '/CrearCasoAdmin';
-      return '/CrearCasoUse';
-    }
-    else if (section === 'tickets') {
-      if (userRole === 'administrador') return '/TicketsAdmin';
-      if (userRole === 'tecnico') return '/TicketsTecnico';
-      return '/Tickets';
-    }
-    return '/home';
+  const roleToPath = {
+    usuario: '/home',
+    tecnico: '/HomeAdmiPage',
+    administrador: '/Superadmin'
   };
 
-  // Función para navegación programática
-  const handleNavigation = (section) => {
-    navigate(getRouteByRole(section));
-  };
-
-  // Handler para logout
-  const handleLogout = () => {
-    localStorage.clear();
-    navigate("/Superadmin", { replace: true });
-  };
-
-  
 
 
   return (
-   
+
     <div className={styles.containerPrincipal}>
       {/* Menú Vertical */}
       <aside
@@ -142,25 +121,9 @@ const Superadmin = () => {
             <ul className={styles.menuIconos}>
               {/* Opción Inicio - visible para todos */}
               <li className={styles.iconosMenu}>
-                <Link to={getRouteByRole('inicio')} className={styles.linkSinSubrayado}>
+                <Link to={roleToPath[userRole] || '/home'} className={styles.linkSinSubrayado}>
                   <FcHome className={styles.menuIcon} />
                   <span className={styles.menuText}>Inicio</span>
-                </Link>
-              </li>
-
-              {/* Opción Crear Caso - visible para todos */}
-              <li className={styles.iconosMenu}>
-                <Link to={getRouteByRole('crear-caso')} className={styles.linkSinSubrayado}>
-                  <FcCustomerSupport className={styles.menuIcon} />
-                  <span className={styles.menuText}>Crear Caso</span>
-                </Link>
-              </li>
-
-              {/* Opción Tickets - visible para todos */}
-              <li className={styles.iconosMenu}>
-                <Link to={getRouteByRole('tickets')} className={styles.linkSinSubrayado}>
-                  <FcAnswers className={styles.menuIcon} />
-                  <span className={styles.menuText}>Tickets</span>
                 </Link>
               </li>
 
@@ -266,8 +229,7 @@ const Superadmin = () => {
       {/* Header */}
       <header className={styles.containerInicio} style={{ marginLeft: isMenuExpanded ? "200px" : "60px" }}>
         <div className={styles.containerInicioImg}>
-          <Link to={getRouteByRole('inicio')} className={styles.linkSinSubrayado}>
-            <FcHome className={styles.menuIcon} />
+          <Link to={roleToPath[userRole] || '/home'} className={styles.linkSinSubrayado}>
             <span>Inicio</span>
           </Link>
         </div>
