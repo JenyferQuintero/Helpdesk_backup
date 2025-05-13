@@ -370,7 +370,7 @@
 .menuVertical {
   width: 60px;
   height: 100vh;
-  background-color: #023e8a;
+  background-color: #3a0ca3;
   color: white;
   position: fixed;
   top: 0;
@@ -462,3 +462,85 @@
       display: block !important;
   }
 }
+
+/*logo empresarial*/
+
+.menuLogoEmpresarial {
+  text-align: center;
+  position: absolute;
+  bottom: 20px; 
+  left: 0;
+  right: 0;
+  opacity: 0.6;
+  transition: all 0.3s ease;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 0 auto; /* Centrado horizontal */
+
+}
+
+.menuLogoEmpresarial img {
+  max-width: 80%; /* Reducir tamaño para mejor ajuste */
+  height: auto;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  display: block;
+  margin: 0 auto; /* Centrado horizontal para la imagen */
+}
+
+.menuLogoEmpresarial:hover {
+  opacity: 1;
+}
+
+.menuLogoEmpresarial:hover img {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Ajustes para el contenedor del menú */
+.menuVerticalDesplegable {
+  position: relative; /* Necesario para el posicionamiento absoluto del logo */
+  height: 100%;
+ 
+}
+
+.menuIconos {
+  height: calc(100% - 80px); /* Ajustar altura considerando el logo */
+  
+}
+
+/* Ajustes para móvil */
+@media (max-width: 768px) {
+  .menuLogoEmpresarial {
+    position: static; /* Cambiar a flujo normal en móvil */
+    margin-top: 20px;
+    width: 100%;
+    border-top: none;
+  }
+  
+  .menuVerticalDesplegable {
+    padding-bottom: 0;
+  }
+  
+  .menuIconos {
+    height: auto;
+  }
+}
+  
+  /* Eliminar el logo empresarial flotante si existe */
+  .floatingLogo {
+    display: none;
+  }
+  
+  /* Ajustes para móvil */
+  @media (max-width: 768px) {
+    .menuLogoEmpresarial {
+      display: none; /* Ocultar en móvil si es necesario */
+    }
+    
+    .menuVerticalDesplegable.mobileMenuOpen .menuLogoEmpresarial {
+      display: block; /* Mostrar cuando el menú móvil está abierto */
+      margin-top: 20px;
+  
+    }
+  }
+  

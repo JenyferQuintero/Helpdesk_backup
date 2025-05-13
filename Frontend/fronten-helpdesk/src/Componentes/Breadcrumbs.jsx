@@ -8,6 +8,9 @@ const Breadcrumbs = () => {
   const { t } = useTranslation();
   const location = useLocation();
   const { breadcrumbs } = useBreadcrumbs(location.pathname);
+  const config = getRouteConfig(currentPath);
+  const pageTitle = config.title;
+  const breadcrumbName = config.name;
 
   return (
     <div className={styles.breadcrumbs}>
