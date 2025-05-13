@@ -1,19 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Outlet, Link } from "react-router-dom";
-// Iconos
 import { FaMagnifyingGlass, FaPowerOff } from "react-icons/fa6";
 import { FaChevronLeft, FaChevronRight, FaSearch, FaFilter, FaPlus, FaSpinner } from "react-icons/fa";
 import { FiAlignJustify } from "react-icons/fi";
 import { FcHome, FcAssistant, FcBusinessman, FcAutomatic, FcAnswers, FcCustomerSupport, FcExpired, FcGenealogy, FcBullish, FcConferenceCall, FcPortraitMode, FcOrganization } from "react-icons/fc";
-// Estilos
 import styles from "../styles/Usuarios.module.css";
 import axios from "axios";
-// Imágenes
 import Logo from "../imagenes/logo proyecto color.jpeg";
 import Logoempresarial from "../imagenes/logo empresarial.png";
 import ChatbotIcon from "../imagenes/img chatbot.png";
 
-const nombre = localStorage.getItem("nombre");
 
 const Usuarios = () => {
   // Estados para el menú y UI
@@ -23,6 +19,7 @@ const Usuarios = () => {
   const [isSupportOpen, setIsSupportOpen] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [isConfigOpen, setIsConfigOpen] = useState(false);
+  const [error, setError] = useState(null);
 
   // Estados para gestión de usuarios
   const [showForm, setShowForm] = useState(false);
@@ -35,6 +32,9 @@ const Usuarios = () => {
   const [formErrors, setFormErrors] = useState({});
   const [filteredUsers, setFilteredUsers] = useState([]);
 
+  // Obtener datos del usuario
+  const nombre = localStorage.getItem("nombre");
+  const userRole = localStorage.getItem("rol") || "";
 
   // Estado para el formulario
   const [formData, setFormData] = useState({
@@ -362,40 +362,46 @@ const Usuarios = () => {
     setCurrentPage(1);
   };
 
- const getRouteByRole = (section) => {
-  const userRole = localStorage.getItem("rol");
-  
-  if (section === 'inicio') {
-    if (userRole === 'administrador') {
-      return '/Superadmin';
-    } else if (userRole === 'tecnico') {
-      return '/HomeAdmiPage';
+  const roleToPath = {
+    usuario: '/home',
+    tecnico: '/HomeAdmiPage',
+    administrador: '/Superadmin'
+  };
+
+  const getRouteByRole = (section) => {
+    const userRole = localStorage.getItem("rol");
+
+    if (section === 'inicio') {
+      if (userRole === 'administrador') {
+        return '/Superadmin';
+      } else if (userRole === 'tecnico') {
+        return '/HomeAdmiPage';
+      } else {
+        return '/home';
+      }
+    } else if (section === 'crear-caso') {
+      if (userRole === 'administrador') {
+        return '/CrearCasoAdmin';
+      } else if (userRole === 'tecnico') {
+        return '/CrearCasoAdmin';
+      } else {
+        return '/CrearCasoUse';
+      }
+    } else if (section === 'tickets') {
+      if (userRole === 'administrador') {
+        return '/TicketsAdmin';
+      } else if (userRole === 'tecnico') {
+        return '/TicketsTecnico';
+      } else {
+        return '/Tickets';
+      }
     } else {
       return '/home';
     }
-  } else if (section === 'crear-caso') {
-    if (userRole === 'administrador') {
-      return '/CrearCasoAdmin';
-    } else if (userRole === 'tecnico') {
-      return '/CrearCasoAdmin';
-    } else {
-      return '/CrearCasoUse';
-    }
-  } else if (section === 'tickets') {
-    if (userRole === 'administrador') {
-      return '/TicketsAdmin';
-    } else if (userRole === 'tecnico') {
-      return '/TicketsTecnico';
-    } else {
-      return '/Tickets';
-    }
-  } else {
-    return '/home';
-  }
-};
+  };
 
   return (
-   <div className={styles.containerPrincipal}>
+    <div className={styles.containerPrincipal}>
       {/* Menú Vertical */}
       <aside
         className={`${styles.menuVertical} ${isMenuExpanded ? styles.expanded : ""}`}
@@ -419,25 +425,9 @@ const Usuarios = () => {
             <ul className={styles.menuIconos}>
               {/* Opción Inicio - visible para todos */}
               <li className={styles.iconosMenu}>
-                <Link to={getRouteByRole('inicio')} className={styles.linkSinSubrayado}>
+                <Link to={roleToPath[userRole] || '/home'} className={styles.linkSinSubrayado}>
                   <FcHome className={styles.menuIcon} />
                   <span className={styles.menuText}>Inicio</span>
-                </Link>
-              </li>
-
-              {/* Opción Crear Caso - visible para todos */}
-              <li className={styles.iconosMenu}>
-                <Link to={getRouteByRole('crear-caso')} className={styles.linkSinSubrayado}>
-                  <FcCustomerSupport className={styles.menuIcon} />
-                  <span className={styles.menuText}>Crear Caso</span>
-                </Link>
-              </li>
-
-              {/* Opción Tickets - visible para todos */}
-              <li className={styles.iconosMenu}>
-                <Link to={getRouteByRole('tickets')} className={styles.linkSinSubrayado}>
-                  <FcAnswers className={styles.menuIcon} />
-                  <span className={styles.menuText}>Tickets</span>
                 </Link>
               </li>
 
@@ -543,8 +533,7 @@ const Usuarios = () => {
       {/* Header */}
       <header className={styles.containerInicio} style={{ marginLeft: isMenuExpanded ? "200px" : "60px" }}>
         <div className={styles.containerInicioImg}>
-          <Link to={getRouteByRole('inicio')} className={styles.linkSinSubrayado}>
-            <FcHome className={styles.menuIcon} />
+          <Link to={roleToPath[userRole] || '/home'} className={styles.linkSinSubrayado}>
             <span>Inicio</span>
           </Link>
         </div>

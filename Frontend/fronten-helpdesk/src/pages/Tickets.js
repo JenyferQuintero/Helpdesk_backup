@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 import { FaMagnifyingGlass, FaPowerOff } from "react-icons/fa6";
 import { FiAlignJustify } from "react-icons/fi";
-import { FcHome, FcCustomerSupport, FcAnswers, FcEmptyFilter, FcPrint } from "react-icons/fc";
+import { FcEmptyFilter, FcHome, FcAssistant, FcBusinessman, FcAutomatic, FcAnswers, FcCustomerSupport, FcExpired, FcGenealogy, FcBullish, FcConferenceCall, FcPortraitMode, FcOrganization } from "react-icons/fc";
 import { FaFileExcel, FaFilePdf, FaFileCsv, FaChevronDown, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import axios from "axios";
 import Logo from "../imagenes/logo proyecto color.jpeg";
@@ -30,6 +30,9 @@ const Tickets = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isMenuExpanded, setIsMenuExpanded] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSupportOpen, setIsSupportOpen] = useState(false);
+  const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [isConfigOpen, setIsConfigOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -69,6 +72,23 @@ const Tickets = () => {
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
   const toggleExportDropdown = () => setIsExportDropdownOpen(!isExportDropdownOpen);
 
+  const toggleSupport = () => {
+    setIsSupportOpen(!isSupportOpen);
+    setIsAdminOpen(false);
+    setIsConfigOpen(false);
+  };
+
+  const toggleAdmin = () => {
+    setIsAdminOpen(!isAdminOpen);
+    setIsSupportOpen(false);
+    setIsConfigOpen(false);
+  };
+
+  const toggleConfig = () => {
+    setIsConfigOpen(!isConfigOpen);
+    setIsSupportOpen(false);
+    setIsAdminOpen(false);
+  };
 
 
   // Función para cargar tickets reales (opcional)
@@ -216,37 +236,37 @@ const Tickets = () => {
     navigate(`/tickets/solucion/${ticketId}`);
   };
 
- const getRouteByRole = (section) => {
-  const userRole = localStorage.getItem("rol");
-  
-  if (section === 'inicio') {
-    if (userRole === 'administrador') {
-      return '/Superadmin';
-    } else if (userRole === 'tecnico') {
-      return '/HomeAdmiPage';
+  const getRouteByRole = (section) => {
+    const userRole = localStorage.getItem("rol");
+
+    if (section === 'inicio') {
+      if (userRole === 'administrador') {
+        return '/Superadmin';
+      } else if (userRole === 'tecnico') {
+        return '/HomeAdmiPage';
+      } else {
+        return '/home';
+      }
+    } else if (section === 'crear-caso') {
+      if (userRole === 'administrador') {
+        return '/CrearCasoAdmin';
+      } else if (userRole === 'tecnico') {
+        return '/CrearCasoAdmin';
+      } else {
+        return '/CrearCasoUse';
+      }
+    } else if (section === 'tickets') {
+      if (userRole === 'administrador') {
+        return '/Tickets';
+      } else if (userRole === 'tecnico') {
+        return '/Tickets';
+      } else {
+        return '/Tickets';
+      }
     } else {
       return '/home';
     }
-  } else if (section === 'crear-caso') {
-    if (userRole === 'administrador') {
-      return '/CrearCasoAdmin';
-    } else if (userRole === 'tecnico') {
-      return '/CrearCasoAdmin';
-    } else {
-      return '/CrearCasoUse';
-    }
-  } else if (section === 'tickets') {
-    if (userRole === 'administrador') {
-      return '/TicketsAdmin';
-    } else if (userRole === 'tecnico') {
-      return '/TicketsTecnico';
-    } else {
-      return '/Tickets';
-    }
-  } else {
-    return '/home';
-  }
-};
+  };
 
   return (
     <div className={styles.containerPrincipal}>
@@ -398,7 +418,6 @@ const Tickets = () => {
       <header className={styles.containerInicio} style={{ marginLeft: isMenuExpanded ? "200px" : "60px" }}>
         <div className={styles.containerInicioImg}>
           <Link to={getRouteByRole('inicio')} className={styles.linkSinSubrayado}>
-            <FcHome className={styles.menuIcon} />
             <span>Inicio</span>
           </Link>
         </div>

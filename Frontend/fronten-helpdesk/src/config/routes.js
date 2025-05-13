@@ -21,5 +21,4 @@ export const routeConfig = {
     title: 'Mis Tickets'
   },
  
-   // ... resto de configuraciones
 };

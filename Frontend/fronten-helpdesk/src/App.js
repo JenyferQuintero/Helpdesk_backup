@@ -26,92 +26,41 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<LoginPage />} />
-          <Route element={<ProtectedRoute allowedRoles={['administrador', 'tecnico', 'usuario']} />} />
-          
-          
-          {/* Rutas públicas */}
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/CrearCasoUse" element={<CrearCasoUse />} />
-          
+          <Route path="/HomeAdmiPage" element={<HomeAdmiPage />} />
+          <Route path="/Tickets" element={<Tickets />} />
+          <Route path="/Superadmin" element={<Superadmin />} />
+          <Route path="/CrearCasoAdmin" element={<CrearCasoAdmin />} />
+          <Route path="/Problemas" element={<Problemas />} />
+          <Route path="/Estadisticas" element={<Estadisticas />} />
+          <Route path="/Usuarios" element={<Usuarios />} />
+          <Route path="/Grupos" element={<Grupos />} />
+          <Route path="/Entidades" element={<Entidades />} />
+          <Route path="/Categorias" element={<Categorias />} />
+          <Route path="/tickets/solucion/:id" element={<SolucionTickets />} />
+          <Route path="/EncuestaSatisfaccion/:surveyId" element={<EncuestaSatisfaccion />} />
+          <Route path="/tickets/:id/historial" element={<TicketHistorial />} />
           {/* Rutas protegidas */}
+          <Route path="/Superadmin" element={
+            <ProtectedRoute allowedRoles={['administrador']}>
+              <Superadmin />
+            </ProtectedRoute>
+          } />
 
           <Route path="/HomeAdmiPage" element={
             <ProtectedRoute allowedRoles={['tecnico']}>
               <HomeAdmiPage />
             </ProtectedRoute>
           } />
-          
-          <Route path="/Tickets" element={
-            <ProtectedRoute allowedRoles={['usuario', 'tecnico', 'administrador']}>
-              <Tickets />
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/Superadmin" element={
-            <ProtectedRoute allowedRoles={['administrador']}>
-              <Superadmin />
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/CrearCasoAdmin" element={
-            <ProtectedRoute allowedRoles={['administrador', 'tecnico']}>
-              <CrearCasoAdmin />
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/Problemas" element={
-            <ProtectedRoute allowedRoles={['tecnico']}>
-              <Problemas />
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/Estadisticas" element={
-            <ProtectedRoute allowedRoles={['tecnico', 'administrador']}>
-              <Estadisticas />
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/Usuarios" element={
-            <ProtectedRoute allowedRoles={['administrador']}>
-              <Usuarios />
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/Grupos" element={
-            <ProtectedRoute allowedRoles={['administrador']}>
-              <Grupos />
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/Entidades" element={
-            <ProtectedRoute allowedRoles={['administrador']}>
-              <Entidades />
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/Categorias" element={
-            <ProtectedRoute allowedRoles={['administrador']}>
-              <Categorias />
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/tickets/solucion/:id" element={
-            <ProtectedRoute allowedRoles={['administrador', 'tecnico']}>
-              <SolucionTickets />
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/EncuestaSatisfaccion/:surveyId" element={
+
+          <Route path="/home" element={
             <ProtectedRoute allowedRoles={['usuario']}>
-              <EncuestaSatisfaccion />
+              <HomePage />
             </ProtectedRoute>
           } />
-          
-          <Route path="/tickets/:id/historial" element={
-            <ProtectedRoute allowedRoles={['usuario', 'tecnico', 'administrador']}>
-              <TicketHistorial />
-            </ProtectedRoute>
-          } />
+
         </Routes>
       </Router>
     </AuthProvider>

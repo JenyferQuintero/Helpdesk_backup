@@ -1,15 +1,11 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-// Iconos
+import { Link, Outlet } from "react-router-dom";
 import { FaMagnifyingGlass, FaPowerOff } from "react-icons/fa6";
 import { FiAlignJustify } from "react-icons/fi";
 import { FcHome, FcAssistant, FcBusinessman, FcAutomatic, FcAnswers, FcCustomerSupport, FcExpired, FcGenealogy, FcBullish, FcConferenceCall, FcPortraitMode, FcOrganization } from "react-icons/fc";
-
-// Imágenes
 import Logo from "../imagenes/logo proyecto color.jpeg";
 import Logoempresarial from "../imagenes/logo empresarial.png";
 import ChatbotIcon from "../imagenes/img chatbot.png";
-// Estilos
 import styles from "../styles/HomeAdmiPage.module.css";
 
 const HomeAdmiPage = () => {
@@ -22,32 +18,46 @@ const HomeAdmiPage = () => {
   const [isConfigOpen, setIsConfigOpen] = useState(false);
   const [isMenuExpanded, setIsMenuExpanded] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  // Obtener datos del usuario
+  const nombre = localStorage.getItem("nombre");
+  const userRole = localStorage.getItem("rol") || "";
+
 
   // Datos
   const tickets = [
     { label: "Nuevo", color: "green", icon: "🟢", count: 0 },
-    { label: "En curso (asignada)", color: "lightgreen", icon: "⭕", count: 0 },
-    { label: "En curso (planificada)", color: "#4169E1", icon: "📅", count: 0 },
+    { label: "En curso (asignada)", color: "lightgreen", icon: "📅", count: 0 },
     { label: "En espera", color: "orange", icon: "🟡", count: 0 },
     { label: "Resueltas", color: "gray", icon: "⚪", count: 0 },
     { label: "Cerrado", color: "black", icon: "⚫", count: 0 },
     { label: "Borrado", color: "red", icon: "🗑", count: 0 },
+    { icon: "📝", label: "Abiertos", count: 5, color: "#4CAF50" },
+    { icon: "⏳", label: "En curso", count: 3, color: "#FFC107" },
+    { icon: "✅", label: "Cerrados", count: 12, color: "#2196F3" },
+    { icon: "⚠️", label: "Pendientes", count: 2, color: "#FF5722" },
+    { icon: "🔧", label: "En solución", count: 1, color: "#9C27B0" },
+    { icon: "✔️", label: "Resueltos", count: 4, color: "#607D8B" },
   ];
 
   const problems = [
     { label: "Nuevo", color: "green", icon: "🟢", count: 0 },
     { label: "Aceptado", color: "#008000", icon: "✔", count: 0 },
-    { label: "En curso (asignada)", color: "lightgreen", icon: "⭕", count: 0 },
-    { label: "En curso (planificada)", color: "#4169E1", icon: "📅", count: 0 },
+    { label: "En curso (asignada)", color: "lightgreen", icon: "📅", count: 0 },
     { label: "En espera", color: "orange", icon: "🟡", count: 0 },
     { label: "Resueltas", color: "gray", icon: "⚪", count: 0 },
     { label: "Bajo observación", color: "black", icon: "👁", count: 0 },
     { label: "Cerrado", color: "black", icon: "⚫", count: 0 },
     { label: "Borrado", color: "red", icon: "🗑", count: 0 },
+
   ];
 
+
+
   // Handlers
-  const nombre = localStorage.getItem("nombre");
 
   const toggleChat = () => setIsChatOpen(!isChatOpen);
 
@@ -77,40 +87,16 @@ const HomeAdmiPage = () => {
   const toggleMenu = () => setIsMenuExpanded(!isMenuExpanded);
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
- const getRouteByRole = (section) => {
-  const userRole = localStorage.getItem("rol");
-  
-  if (section === 'inicio') {
-    if (userRole === 'administrador') {
-      return '/Superadmin';
-    } else if (userRole === 'tecnico') {
-      return '/HomeAdmiPage';
-    } else {
-      return '/home';
-    }
-  } else if (section === 'crear-caso') {
-    if (userRole === 'administrador') {
-      return '/CrearCasoAdmin';
-    } else if (userRole === 'tecnico') {
-      return '/CrearCasoAdmin';
-    } else {
-      return '/CrearCasoUse';
-    }
-  } else if (section === 'tickets') {
-    if (userRole === 'administrador') {
-      return '/TicketsAdmin';
-    } else if (userRole === 'tecnico') {
-      return '/TicketsTecnico';
-    } else {
-      return '/Tickets';
-    }
-  } else {
-    return '/home';
-  }
-};
+  const roleToPath = {
+    usuario: '/home',
+    tecnico: '/HomeAdmiPage',
+    administrador: '/Superadmin'
+  };
+
+
 
   return (
-   
+
     <div className={styles.containerPrincipal}>
       {/* Menú Vertical */}
       <aside
@@ -135,25 +121,9 @@ const HomeAdmiPage = () => {
             <ul className={styles.menuIconos}>
               {/* Opción Inicio - visible para todos */}
               <li className={styles.iconosMenu}>
-                <Link to={getRouteByRole('inicio')} className={styles.linkSinSubrayado}>
+                <Link to={roleToPath[userRole] || '/home'} className={styles.linkSinSubrayado}>
                   <FcHome className={styles.menuIcon} />
                   <span className={styles.menuText}>Inicio</span>
-                </Link>
-              </li>
-
-              {/* Opción Crear Caso - visible para todos */}
-              <li className={styles.iconosMenu}>
-                <Link to={getRouteByRole('crear-caso')} className={styles.linkSinSubrayado}>
-                  <FcCustomerSupport className={styles.menuIcon} />
-                  <span className={styles.menuText}>Crear Caso</span>
-                </Link>
-              </li>
-
-              {/* Opción Tickets - visible para todos */}
-              <li className={styles.iconosMenu}>
-                <Link to={getRouteByRole('tickets')} className={styles.linkSinSubrayado}>
-                  <FcAnswers className={styles.menuIcon} />
-                  <span className={styles.menuText}>Tickets</span>
                 </Link>
               </li>
 
@@ -259,8 +229,7 @@ const HomeAdmiPage = () => {
       {/* Header */}
       <header className={styles.containerInicio} style={{ marginLeft: isMenuExpanded ? "200px" : "60px" }}>
         <div className={styles.containerInicioImg}>
-          <Link to={getRouteByRole('inicio')} className={styles.linkSinSubrayado}>
-            <FcHome className={styles.menuIcon} />
+          <Link to={roleToPath[userRole] || '/home'} className={styles.linkSinSubrayado}>
             <span>Inicio</span>
           </Link>
         </div>
