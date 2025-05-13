@@ -29,6 +29,8 @@ const CrearCasoUse = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const nombre = localStorage.getItem("nombre");
+  console.log(nombre);
+  
 
   // Estado del formulario
   const [formData, setFormData] = useState({
