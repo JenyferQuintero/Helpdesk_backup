@@ -50,6 +50,8 @@ const Tickets = () => {
   const [isExportDropdownOpen, setIsExportDropdownOpen] = useState(false);
 
   // Handlers para menú y chat
+  const nombre = localStorage.getItem("nombre");
+
   const toggleChat = () => setIsChatOpen(!isChatOpen);
   const toggleMenu = () => setIsMenuExpanded(!isMenuExpanded);
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -201,7 +203,7 @@ const Tickets = () => {
             </button>
           </div>
           <div className={styles.userContainer}>
-            <span className={styles.username}>Bienvenido, <span id="nombreusuario"></span></span>
+            <span className={styles.username}>Bienvenido, <span id="nombreusuario">{nombre}</span></span>
             <div className={styles.iconContainer}>
               <Link to="/">
                 <FaPowerOff className={styles.icon} />

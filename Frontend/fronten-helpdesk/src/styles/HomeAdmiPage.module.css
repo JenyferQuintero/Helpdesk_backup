@@ -10,16 +10,19 @@
   flex-direction: column; /* opcional, para apilar hijos verticalmente */
   box-sizing: border-box; /* para incluir padding en el tamaño total */
 }
-.container {  
-  width: 85%;
-  height: 100%;
-  margin: 0 auto;
-  padding: 80px;
+.containerHomeAdmiPage {  
+  width: 96%;
+  margin: 9px auto 20px auto;
+  padding: 20px;
   background-color: rgb(224, 224, 241);
   border-radius: 15px;
   box-shadow: 15px 15px 15px rgba(15, 12, 207, 0.3);
-  margin-top: 9px;
   transition: margin-left 0.3s ease;
+  min-height: 89vh;
+  max-height: calc(100vh - 49px);
+  display: block;
+  overflow-y: auto;
+  box-sizing: border-box;
 }
 
 .containerInicio {

@@ -46,6 +46,7 @@ const HomeAdmiPage = () => {
     { label: "Borrado", color: "red", icon: "🗑", count: 0 },
   ];
 
+  const nombre = localStorage.getItem("nombre");
   // Handlers
   const toggleChat = () => setIsChatOpen(!isChatOpen);
 
@@ -76,7 +77,7 @@ const HomeAdmiPage = () => {
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
   return (
-      <div className={styles.containerPrincipal}>
+    <div className={styles.containerPrincipal}>
       {/* Menú Vertical */}
       <aside
         className={`${styles.menuVertical} ${isMenuExpanded ? styles.expanded : ""}`}
@@ -216,7 +217,7 @@ const HomeAdmiPage = () => {
             </button>
           </div>
           <div className={styles.userContainer}>
-            <span className={styles.username}>Bienvenido, <span id="nombreusuario"></span></span>
+            <span className={styles.username}>Bienvenido, <span id="nombreusuario">{nombre}</span></span>
             <div className={styles.iconContainer}>
               <Link to="/">
                 <FaPowerOff className={styles.icon} />
@@ -227,7 +228,7 @@ const HomeAdmiPage = () => {
       </header>
 
       {/* Contenido Principal */}
-      <div className={styles.container} style={{ marginLeft: isMenuExpanded ? "200px" : "60px" }}>
+      <div className={styles.containerHomeAdmiPage} style={{ marginLeft: isMenuExpanded ? "200px" : "60px" }}>
         <main>
           <div className={styles.flexColumna}>
             <div className={styles.row}>

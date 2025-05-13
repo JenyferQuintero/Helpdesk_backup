@@ -29,9 +29,10 @@ def Login():
         if usuario:
             return jsonify({
                 "mensaje": "Inicio de sesión exitoso",
-                "nombre": usuario[0],
-                "usuario": usuario[1],
-                "rol": usuario[2]
+                "id_usuario": usuario[0],
+                "nombre": usuario[1],
+                "usuario": usuario[2],
+                "rol": usuario[3]
             }), 200
 
         return jsonify({"error": "Credenciales inválidas"}), 401

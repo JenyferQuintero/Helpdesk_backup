@@ -16,6 +16,7 @@ const HomePage = () => {
     setIsChatOpen(!isChatOpen);
   };
   const nombre = localStorage.getItem("nombre");
+  
   const toggleMenu = () => setIsMenuExpanded(!isMenuExpanded);
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
