@@ -1,9 +1,10 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 import { FaMagnifyingGlass, FaPowerOff } from "react-icons/fa6";
 import { FiAlignJustify } from "react-icons/fi";
-import { FcHome, FcCustomerSupport, FcAnswers, FcEmptyFilter, FcPrint } from "react-icons/fc";
+import { FcEmptyFilter, FcHome, FcAssistant, FcBusinessman, FcAutomatic, FcAnswers, FcCustomerSupport, FcExpired, FcGenealogy, FcBullish, FcConferenceCall, FcPortraitMode, FcOrganization } from "react-icons/fc";
 import { FaFileExcel, FaFilePdf, FaFileCsv, FaChevronDown, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import axios from "axios";
 import Logo from "../imagenes/logo proyecto color.jpeg";
 import Logoempresarial from "../imagenes/logo empresarial.png";
 import ChatbotIcon from "../imagenes/img chatbot.png";
@@ -11,12 +12,12 @@ import styles from "../styles/Tickets.module.css";
 
 // Datos de ejemplo más completos
 const initialData = Array.from({ length: 100 }, (_, i) => ({
-  id: `2 503 290 ${(1000 - i).toString().padStart(3, '0')}`,
+  id: `2503290${(1000 - i).toString().padStart(3, '0')}`,
   titulo: `CREACION DE USUARIOS - PARALELO ACADEMICO ${i + 1}`,
-  solicitante: ['Jenyfer Quintero Calixto',],
+  solicitante: 'Jenyfer Quintero Calixto',
   descripcion: 'ALIMENTAR EL EXCEL DE DELOGIN',
   prioridad: ['Mediana', 'Alta', 'Baja'][i % 3],
-  estado: ['Cerrado', 'Abierto', 'Curso'][i % 3],
+  estado: ['Cerrado', 'Abierto', 'En Curso'][i % 3],
   tecnico: 'Jenyfer Quintero Calixto',
   grupo: 'EDQ B',
   categoria: 'CREACION DE USUARIO',
@@ -25,13 +26,25 @@ const initialData = Array.from({ length: 100 }, (_, i) => ({
 }));
 
 const Tickets = () => {
-  // Estado del menú y chat
+  // Estados para menú y chat
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isMenuExpanded, setIsMenuExpanded] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSupportOpen, setIsSupportOpen] = useState(false);
+  const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [isConfigOpen, setIsConfigOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  // Estado de la tabla y filtros
-  const [data, setData] = useState(initialData);
+  // Estados para datos y carga
+  const [tickets, setTickets] = useState(initialData); // Usamos los datos de ejemplo inicialmente
+  const [filteredTickets, setFilteredTickets] = useState(initialData);
+  const [isLoading, setIsLoading] = useState(false); // Cambiado a false porque usamos datos locales
+  const [error, setError] = useState(null);
+  const [usingDemoData, setUsingDemoData] = useState(true); // Para indicar que estamos usando datos de ejemplo
+
+  // Estados para búsqueda y filtros
+  const [searchTerm, setSearchTerm] = useState("");
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState({
     id: '',
@@ -44,10 +57,14 @@ const Tickets = () => {
     categoria: ''
   });
 
-  // Estado para paginación
+  // Estados para paginación
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(15);
   const [isExportDropdownOpen, setIsExportDropdownOpen] = useState(false);
+
+  // Obtener rol del usuario desde localStorage
+  const userRole = localStorage.getItem("rol") || "usuario";
+  const nombre = localStorage.getItem("nombre");
 
   // Handlers para menú y chat
   const nombre = localStorage.getItem("nombre");
@@ -57,6 +74,96 @@ const Tickets = () => {
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
   const toggleExportDropdown = () => setIsExportDropdownOpen(!isExportDropdownOpen);
 
+  const toggleSupport = () => {
+    setIsSupportOpen(!isSupportOpen);
+    setIsAdminOpen(false);
+    setIsConfigOpen(false);
+  };
+
+  const toggleAdmin = () => {
+    setIsAdminOpen(!isAdminOpen);
+    setIsSupportOpen(false);
+    setIsConfigOpen(false);
+  };
+
+  const toggleConfig = () => {
+    setIsConfigOpen(!isConfigOpen);
+    setIsSupportOpen(false);
+    setIsAdminOpen(false);
+  };
+
+
+  // Función para cargar tickets reales (opcional)
+  const fetchTickets = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get("http://127.0.0.1:5000/api/tickets", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      setTickets(response.data);
+      setFilteredTickets(response.data);
+      setUsingDemoData(false);
+    } catch (err) {
+      setError("No se pudo conectar al servidor. Mostrando datos de ejemplo.");
+      setTickets(initialData);
+      setFilteredTickets(initialData);
+      setUsingDemoData(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Cargar tickets al montar el componente (opcional)
+  useEffect(() => {
+    // Comentado para usar solo datos de ejemplo
+    // fetchTickets();
+  }, []);
+
+  // Manejar búsqueda desde URL
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const urlSearchTerm = searchParams.get("search");
+    if (urlSearchTerm) {
+      setSearchTerm(urlSearchTerm);
+      handleSearch(urlSearchTerm);
+    }
+  }, [location.search]);
+
+  // Handlers para búsqueda
+  const handleSearch = (searchValue) => {
+    const term = searchValue.toLowerCase().trim();
+
+    if (!term) {
+      setFilteredTickets(tickets);
+      return;
+    }
+
+    const filtered = tickets.filter(item => {
+      return Object.values(item).some(val => {
+        if (val === null || val === undefined) return false;
+        return String(val).toLowerCase().includes(term);
+      });
+    });
+
+    setFilteredTickets(filtered);
+    setCurrentPage(1);
+  };
+
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    handleSearch(value);
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    navigate(`/tickets?search=${encodeURIComponent(searchTerm)}`);
+  };
+
   // Handlers para filtros
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -64,14 +171,14 @@ const Tickets = () => {
   };
 
   const applyFilters = () => {
-    const filteredData = initialData.filter(item => {
+    const filteredData = tickets.filter(item => {
       return Object.keys(filters).every(key => {
         if (!filters[key]) return true;
         return String(item[key]).toLowerCase().includes(filters[key].toLowerCase());
       });
     });
-    setData(filteredData);
-    setCurrentPage(1); // Resetear a la primera página al aplicar filtros
+    setFilteredTickets(filteredData);
+    setCurrentPage(1);
   };
 
   const clearFilters = () => {
@@ -85,23 +192,23 @@ const Tickets = () => {
       grupo: '',
       categoria: ''
     });
-    setData(initialData);
+    setFilteredTickets(tickets);
     setCurrentPage(1);
   };
 
   // Handlers para exportación
   const exportToExcel = () => {
-    alert('Exportando a Excel...');
+    console.log("Exportando a Excel", filteredTickets);
     setIsExportDropdownOpen(false);
   };
 
   const exportToPdf = () => {
-    alert('Exportando a PDF...');
+    console.log("Exportando a PDF", filteredTickets);
     setIsExportDropdownOpen(false);
   };
 
   const exportToCsv = () => {
-    alert('Exportando a CSV...');
+    console.log("Exportando a CSV", filteredTickets);
     setIsExportDropdownOpen(false);
   };
 
@@ -110,23 +217,11 @@ const Tickets = () => {
     setIsExportDropdownOpen(false);
   };
 
-  // Handler para búsqueda global
-  const handleGlobalSearch = (e) => {
-    const searchTerm = e.target.value.toLowerCase();
-    const filtered = initialData.filter(item =>
-      Object.values(item).some(val =>
-        String(val).toLowerCase().includes(searchTerm)
-      ))
-
-    setData(filtered);
-    setCurrentPage(1);
-  };
-
   // Lógica de paginación
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = data.slice(indexOfFirstRow, indexOfLastRow);
-  const totalPages = Math.ceil(data.length / rowsPerPage);
+  const currentRows = filteredTickets.slice(indexOfFirstRow, indexOfLastRow);
+  const totalPages = Math.ceil(filteredTickets.length / rowsPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   const nextPage = () => currentPage < totalPages && setCurrentPage(currentPage + 1);
@@ -135,6 +230,44 @@ const Tickets = () => {
   const handleRowsPerPageChange = (e) => {
     setRowsPerPage(Number(e.target.value));
     setCurrentPage(1);
+  };
+
+
+  // Función para manejar el clic en un ticket
+  const handleTicketClick = (ticketId) => {
+    navigate(`/tickets/solucion/${ticketId}`);
+  };
+
+  const getRouteByRole = (section) => {
+    const userRole = localStorage.getItem("rol");
+
+    if (section === 'inicio') {
+      if (userRole === 'administrador') {
+        return '/Superadmin';
+      } else if (userRole === 'tecnico') {
+        return '/HomeAdmiPage';
+      } else {
+        return '/home';
+      }
+    } else if (section === 'crear-caso') {
+      if (userRole === 'administrador') {
+        return '/CrearCasoAdmin';
+      } else if (userRole === 'tecnico') {
+        return '/CrearCasoAdmin';
+      } else {
+        return '/CrearCasoUse';
+      }
+    } else if (section === 'tickets') {
+      if (userRole === 'administrador') {
+        return '/Tickets';
+      } else if (userRole === 'tecnico') {
+        return '/Tickets';
+      } else {
+        return '/Tickets';
+      }
+    } else {
+      return '/home';
+    }
   };
 
   return (
@@ -149,6 +282,7 @@ const Tickets = () => {
           <div className={styles.logoContainer}>
             <img src={Logo} alt="Logo" />
           </div>
+
           <button
             className={`${styles.menuButton} ${styles.mobileMenuButton}`}
             type="button"
@@ -156,54 +290,166 @@ const Tickets = () => {
           >
             <FiAlignJustify className={styles.menuIcon} />
           </button>
-          <div className={styles.menuVerticalDesplegable}>
+
+          <div className={`${styles.menuVerticalDesplegable} ${isMobileMenuOpen ? styles.mobileMenuOpen : ''}`}>
             <ul className={styles.menuIconos}>
+              {/* Opción Inicio - visible para todos */}
               <li className={styles.iconosMenu}>
-                <Link to="/home" className={styles.linkSinSubrayado}>
+                <Link to={getRouteByRole('inicio')} className={styles.linkSinSubrayado}>
                   <FcHome className={styles.menuIcon} />
                   <span className={styles.menuText}>Inicio</span>
                 </Link>
               </li>
+
+              {/* Opción Crear Caso - visible para todos */}
               <li className={styles.iconosMenu}>
-                <Link to="/CrearCasoUse" className={styles.linkSinSubrayado}>
+                <Link to={getRouteByRole('crear-caso')} className={styles.linkSinSubrayado}>
                   <FcCustomerSupport className={styles.menuIcon} />
                   <span className={styles.menuText}>Crear Caso</span>
                 </Link>
               </li>
+
+              {/* Opción Tickets - visible para todos */}
               <li className={styles.iconosMenu}>
-                <Link to="/Tickets" className={styles.linkSinSubrayado}>
+                <Link to={getRouteByRole('tickets')} className={styles.linkSinSubrayado}>
                   <FcAnswers className={styles.menuIcon} />
                   <span className={styles.menuText}>Tickets</span>
                 </Link>
               </li>
+
+              {/* Menú Soporte - solo para técnicos */}
+              {userRole === "tecnico" && (
+                <li className={styles.iconosMenu}>
+                  <div className={styles.linkSinSubrayado} onClick={toggleSupport}>
+                    <FcAssistant className={styles.menuIcon} />
+                    <span className={styles.menuText}> Soporte</span>
+                  </div>
+
+                  <ul className={`${styles.submenu} ${isSupportOpen ? styles.showSubmenu : ''}`}>
+                    <li>
+                      <Link to="/Tickets" className={styles.submenuLink}>
+                        <FcAnswers className={styles.menuIcon} />
+                        <span className={styles.menuText}>Tickets</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/CrearCasoAdmin" className={styles.submenuLink}>
+                        <FcCustomerSupport className={styles.menuIcon} />
+                        <span className={styles.menuText}>Crear Caso</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/Problemas" className={styles.submenuLink}>
+                        <FcExpired className={styles.menuIcon} />
+                        <span className={styles.menuText}>Problemas</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/Estadisticas" className={styles.submenuLink}>
+                        <FcBullish className={styles.menuIcon} />
+                        <span className={styles.menuText}>Estadísticas</span>
+                      </Link>
+                    </li>
+                  </ul>
+                </li>
+              )}
+
+              {/* Menú Administración - solo para técnicos */}
+              {userRole === "tecnico" && (
+                <li className={styles.iconosMenu}>
+                  <div className={styles.linkSinSubrayado} onClick={toggleAdmin}>
+                    <FcBusinessman className={styles.menuIcon} />
+                    <span className={styles.menuText}> Administración</span>
+                  </div>
+                  <ul className={`${styles.submenu} ${isAdminOpen ? styles.showSubmenu : ''}`}>
+                    <li>
+                      <Link to="/Usuarios" className={styles.submenuLink}>
+                        <FcPortraitMode className={styles.menuIcon} />
+                        <span className={styles.menuText}> Usuarios</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/Grupos" className={styles.submenuLink}>
+                        <FcConferenceCall className={styles.menuIcon} />
+                        <span className={styles.menuText}> Grupos</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/Entidades" className={styles.submenuLink}>
+                        <FcOrganization className={styles.menuIcon} />
+                        <span className={styles.menuText}> Entidades</span>
+                      </Link>
+                    </li>
+                  </ul>
+                </li>
+              )}
+
+              {/* Menú Configuración - solo para técnicos */}
+              {userRole === "tecnico" && (
+                <li className={styles.iconosMenu}>
+                  <div className={styles.linkSinSubrayado} onClick={toggleConfig}>
+                    <FcAutomatic className={styles.menuIcon} />
+                    <span className={styles.menuText}> Configuración</span>
+                  </div>
+                  <ul className={`${styles.submenu} ${isConfigOpen ? styles.showSubmenu : ''}`}>
+                    <li>
+                      <Link to="/Categorias" className={styles.submenuLink}>
+                        <FcGenealogy className={styles.menuIcon} />
+                        <span className={styles.menuText}>Categorias</span>
+                      </Link>
+                    </li>
+                  </ul>
+                </li>
+              )}
             </ul>
           </div>
-          <div className={styles.empresarialContainer}>
-            <img src={Logoempresarial} alt="Logoempresarial" />
+
+          <div className={styles.floatingContainer}>
+            <div className={styles.menuLogoEmpresarial}>
+              <img src={Logoempresarial} alt="Logo Empresarial" />
+            </div>
           </div>
         </div>
       </aside>
 
+      {/* Contenido principal */}
+      <div style={{ marginLeft: isMenuExpanded ? "200px" : "60px", transition: "margin-left 0.3s ease" }}>
+        <Outlet />
+      </div>
       {/* Header */}
-      <header
-        className={styles.containerInicio}
-        style={{ marginLeft: isMenuExpanded ? "200px" : "60px" }}
-      >
+      <header className={styles.containerInicio} style={{ marginLeft: isMenuExpanded ? "200px" : "60px" }}>
         <div className={styles.containerInicioImg}>
-          <Link to="/home" className={styles.linkSinSubrayado}>
-            <FcHome className={styles.menu} />
+          <Link to={getRouteByRole('inicio')} className={styles.linkSinSubrayado}>
             <span>Inicio</span>
           </Link>
         </div>
         <div className={styles.inputContainer}>
           <div className={styles.searchContainer}>
-            <input className={styles.search} type="text" placeholder="Buscar" />
-            <button type="submit" className={styles.buttonBuscar} title="Buscar">
+            <input
+              className={styles.search}
+              type="text"
+              placeholder="Buscar..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <button
+              className={styles.buttonBuscar}
+              title="Buscar"
+              disabled={isLoading || !searchTerm.trim()}
+            >
               <FaMagnifyingGlass className={styles.searchIcon} />
             </button>
+            {isLoading && <span className={styles.loading}>Buscando...</span>}
+            {error && <div className={styles.errorMessage}>{error}</div>}
           </div>
+
+
           <div className={styles.userContainer}>
+<<<<<<< HEAD
             <span className={styles.username}>Bienvenido, <span id="nombreusuario">{nombre}</span></span>
+=======
+            <span className={styles.username}>Bienvenido, {nombre}</span>
+>>>>>>> 6f35d6fd23931639e33de38c72da2f182dd2e407
             <div className={styles.iconContainer}>
               <Link to="/">
                 <FaPowerOff className={styles.icon} />
@@ -215,16 +461,26 @@ const Tickets = () => {
 
       {/* Contenido principal - Tabla de tickets */}
       <div className={styles.containerticket} style={{ marginLeft: isMenuExpanded ? "200px" : "60px" }}>
+
         {/* Barra de herramientas */}
         <div className={styles.toolbar}>
           <div className={styles.searchContainer}>
             <input
               className={styles.search}
               type="text"
-              placeholder="Buscar"
-              onChange={handleGlobalSearch}
+              placeholder="Buscar en tickets..."
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                handleSearch(e.target.value);
+              }}
             />
-            <button type="submit" className={styles.buttonBuscar} title="Buscar">
+            <button
+              type="button"
+              className={styles.buttonBuscar}
+              title="Buscar"
+              onClick={() => handleSearch(searchTerm)}
+            >
               <FaMagnifyingGlass className={styles.searchIcon} />
             </button>
           </div>
@@ -236,6 +492,7 @@ const Tickets = () => {
               title="Alternar filtros"
             >
               <FcEmptyFilter />
+              <span>{showFilters ? 'Ocultar' : 'Mostrar'} filtros</span>
             </button>
 
             {/* Dropdown de exportación */}
@@ -250,41 +507,28 @@ const Tickets = () => {
               {isExportDropdownOpen && (
                 <div
                   className={styles.exportDropdownContent}
-                  // Cerrar el dropdown al hacer clic fuera
                   onMouseLeave={() => setIsExportDropdownOpen(false)}
                 >
                   <button
-                    onClick={() => {
-                      exportToExcel();
-                      setIsExportDropdownOpen(false);
-                    }}
+                    onClick={exportToExcel}
                     className={styles.exportOption}
                   >
                     <FaFileExcel /> Excel
                   </button>
                   <button
-                    onClick={() => {
-                      exportToPdf();
-                      setIsExportDropdownOpen(false);
-                    }}
+                    onClick={exportToPdf}
                     className={styles.exportOption}
                   >
                     <FaFilePdf /> PDF
                   </button>
                   <button
-                    onClick={() => {
-                      exportToCsv();
-                      setIsExportDropdownOpen(false);
-                    }}
+                    onClick={exportToCsv}
                     className={styles.exportOption}
                   >
                     <FaFileCsv /> CSV
                   </button>
                   <button
-                    onClick={() => {
-                      printTable();
-                      setIsExportDropdownOpen(false);
-                    }}
+                    onClick={printTable}
                     className={styles.exportOption}
                   >
                     <FcPrint /> Imprimir
@@ -306,6 +550,7 @@ const Tickets = () => {
                   name="id"
                   value={filters.id}
                   onChange={handleFilterChange}
+                  placeholder="Filtrar por ID"
                 />
               </div>
               <div className={styles.filterGroup}>
@@ -315,6 +560,7 @@ const Tickets = () => {
                   name="titulo"
                   value={filters.titulo}
                   onChange={handleFilterChange}
+                  placeholder="Filtrar por título"
                 />
               </div>
               <div className={styles.filterGroup}>
@@ -324,6 +570,7 @@ const Tickets = () => {
                   name="solicitante"
                   value={filters.solicitante}
                   onChange={handleFilterChange}
+                  placeholder="Filtrar por solicitante"
                 />
               </div>
             </div>
@@ -335,9 +582,9 @@ const Tickets = () => {
                   value={filters.prioridad}
                   onChange={handleFilterChange}
                 >
-                  <option value="">Todas</option>
-                  <option value="Mediana">Mediana</option>
+                  <option value="">Todas las prioridades</option>
                   <option value="Alta">Alta</option>
+                  <option value="Mediana">Mediana</option>
                   <option value="Baja">Baja</option>
                 </select>
               </div>
@@ -348,10 +595,10 @@ const Tickets = () => {
                   value={filters.estado}
                   onChange={handleFilterChange}
                 >
-                  <option value="">Todos</option>
-                  <option value="Cerrado">Cerrado</option>
+                  <option value="">Todos los estados</option>
                   <option value="Abierto">Abierto</option>
                   <option value="En Curso">En Curso</option>
+                  <option value="Cerrado">Cerrado</option>
                 </select>
               </div>
               <div className={styles.filterGroup}>
@@ -361,6 +608,7 @@ const Tickets = () => {
                   name="tecnico"
                   value={filters.tecnico}
                   onChange={handleFilterChange}
+                  placeholder="Filtrar por técnico"
                 />
               </div>
             </div>
@@ -372,6 +620,7 @@ const Tickets = () => {
                   name="grupo"
                   value={filters.grupo}
                   onChange={handleFilterChange}
+                  placeholder="Filtrar por grupo"
                 />
               </div>
               <div className={styles.filterGroup}>
@@ -381,6 +630,7 @@ const Tickets = () => {
                   name="categoria"
                   value={filters.categoria}
                   onChange={handleFilterChange}
+                  placeholder="Filtrar por categoría"
                 />
               </div>
               <div className={styles.filterActions}>
@@ -406,41 +656,55 @@ const Tickets = () => {
                 <th>Descripción</th>
                 <th>Prioridad</th>
                 <th>Estado</th>
-                <th>Técnico Asignado</th>
+                <th>Técnico</th>
                 <th>Grupo</th>
                 <th>Categoría</th>
               </tr>
             </thead>
             <tbody>
-              {currentRows.map((item, index) => (
-                <tr key={index}>
-                  <td>
-                    <Link to={`/tickets/solucion/${item.id}`} className={styles.linkTicket}>
-                      {item.id}
-                    </Link>
+              {currentRows.length > 0 ? (
+                currentRows.map((ticket, index) => (
+                  <tr key={index}>
+                    <td>
+                      <span
+                        className={styles.clickableCell}
+                        onClick={() => handleTicketClick(ticket.id)}
+                      >
+                        {ticket.id}
+                      </span>
+                    </td>
+                    <td>
+                      <span
+                        className={styles.clickableCell}
+                        onClick={() => handleTicketClick(ticket.id)}
+                      >
+                        {ticket.titulo}
+                      </span>
+                    </td>
+                    <td>{ticket.solicitante}</td>
+                    <td>{ticket.descripcion}</td>
+                    <td>
+                      <span className={`${styles.priority} ${styles[ticket.prioridad.toLowerCase()]}`}>
+                        {ticket.prioridad}
+                      </span>
+                    </td>
+                    <td>
+                      <span className={`${styles.status} ${styles[ticket.estado.toLowerCase().replace(' ', '')]}`}>
+                        {ticket.estado}
+                      </span>
+                    </td>
+                    <td>{ticket.tecnico}</td>
+                    <td>{ticket.grupo}</td>
+                    <td>{ticket.categoria}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="9" className={styles.noResults}>
+                    No se encontraron tickets que coincidan con los criterios de búsqueda
                   </td>
-                  <td>
-                    <Link to={`/tickets/solucion/${item.id}`} className={styles.linkTicket}>
-                      {item.titulo}
-                    </Link>
-                  </td>
-                  <td>{item.solicitante}</td>
-                  <td>{item.descripcion}</td>
-                  <td>
-                    <span className={`${styles.priority} ${styles[item.prioridad.toLowerCase()]}`}>
-                      {item.prioridad}
-                    </span>
-                  </td>
-                  <td>
-                    <span className={`${styles.status} ${styles[item.estado.toLowerCase().replace(' ', '')]}`}>
-                      {item.estado}
-                    </span>
-                  </td>
-                  <td>{item.tecnico}</td>
-                  <td>{item.grupo}</td>
-                  <td>{item.categoria}</td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>
@@ -454,22 +718,12 @@ const Tickets = () => {
               onChange={handleRowsPerPageChange}
               className={styles.rowsSelect}
             >
-              <option value={15}>15</option>
-              <option value={30}>30</option>
-              <option value={50}>50</option>
-              <option value={100}>100</option>
-              <option value={100}>200</option>
-              <option value={100}>300</option>
-              <option value={100}>400</option>
-              <option value={100}>500</option>
-              <option value={100}>600</option>
-              <option value={100}>700</option>
-              <option value={100}>800</option>
-              <option value={100}>900</option>
-              <option value={1000}>1000</option>
+              {[15, 30, 50, 100].map(option => (
+                <option key={option} value={option}>{option}</option>
+              ))}
             </select>
             <span className={styles.rowsInfo}>
-              Mostrando {indexOfFirstRow + 1}-{Math.min(indexOfLastRow, data.length)} de {data.length} registros
+              Mostrando {indexOfFirstRow + 1}-{Math.min(indexOfLastRow, filteredTickets.length)} de {filteredTickets.length} tickets
             </span>
           </div>
 
@@ -483,7 +737,6 @@ const Tickets = () => {
             </button>
 
             {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-              // Lógica para mostrar páginas alrededor de la actual
               let pageNumber;
               if (totalPages <= 5) {
                 pageNumber = i + 1;

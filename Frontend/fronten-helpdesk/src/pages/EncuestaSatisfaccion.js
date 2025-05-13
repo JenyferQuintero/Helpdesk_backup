@@ -1,50 +1,44 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styles from '../styles/EncuestaSatisfaccion.module.css';
 
 const EncuestaSatisfaccion = () => {
-  const { id } = useParams();
+  const { surveyId } = useParams();
   const navigate = useNavigate();
-  const [calificacion, setCalificacion] = useState(0);
-  const [comentarios, setComentarios] = useState('');
+
+  useEffect(() => {
+    // Aquí podrías cargar datos específicos de la encuesta usando surveyId
+  }, [surveyId]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Lógica para enviar la encuesta
-    alert(`Encuesta enviada para el ticket ${id}`);
-    navigate('/Tickets');
+    // Aquí iría la lógica para enviar la encuesta
+    
+    // Redirigir a home después de completar
+    navigate('/home');
   };
 
-  return (  
-    <div className={styles.container}>
-      <h1>Encuesta de Satisfacción - Ticket #{id}</h1>
-      
+  return (
+    <div className={styles.encuestaContainer}>
+      <h1>Encuesta de Satisfacción</h1>
       <form onSubmit={handleSubmit}>
         <div className={styles.formGroup}>
-          <label>Calificación del servicio (1-5):</label>
-          <div className={styles.rating}>
-            {[1, 2, 3, 4, 5].map((star) => (
-              <button
-                key={star}
-                type="button"
-                className={`${styles.star} ${calificacion >= star ? styles.active : ''}`}
-                onClick={() => setCalificacion(star)}
-              >
-                ★
-              </button>
-            ))}
-          </div>
+          <label>¿Cómo calificaría el servicio recibido?</label>
+          <select required>
+            <option value="">Seleccione...</option>
+            <option value="5">Excelente (5)</option>
+            <option value="4">Muy Bueno (4)</option>
+            <option value="3">Bueno (3)</option>
+            <option value="2">Regular (2)</option>
+            <option value="1">Deficiente (1)</option>
+          </select>
         </div>
-        
+
         <div className={styles.formGroup}>
-          <label>Comentarios adicionales:</label>
-          <textarea
-            value={comentarios}
-            onChange={(e) => setComentarios(e.target.value)}
-            className={styles.textarea}
-          />
+          <label>Comentarios adicionales</label>
+          <textarea rows="4" placeholder="Escribe tus comentarios aquí..."></textarea>
         </div>
-        
+
         <button type="submit" className={styles.submitButton}>
           Enviar Encuesta
         </button>

@@ -1,19 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Outlet, Link } from "react-router-dom";
-// Iconos
 import { FaMagnifyingGlass, FaPowerOff } from "react-icons/fa6";
 import { FaChevronLeft, FaChevronRight, FaSearch, FaFilter, FaPlus, FaSpinner } from "react-icons/fa";
 import { FiAlignJustify } from "react-icons/fi";
 import { FcHome, FcAssistant, FcBusinessman, FcAutomatic, FcAnswers, FcCustomerSupport, FcExpired, FcGenealogy, FcBullish, FcConferenceCall, FcPortraitMode, FcOrganization } from "react-icons/fc";
-// Estilos
 import styles from "../styles/Usuarios.module.css";
 import axios from "axios";
-// Imágenes
 import Logo from "../imagenes/logo proyecto color.jpeg";
 import Logoempresarial from "../imagenes/logo empresarial.png";
 import ChatbotIcon from "../imagenes/img chatbot.png";
 
-const nombre = localStorage.getItem("nombre");
 
 const Usuarios = () => {
   // Estados para el menú y UI
@@ -23,6 +19,7 @@ const Usuarios = () => {
   const [isSupportOpen, setIsSupportOpen] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [isConfigOpen, setIsConfigOpen] = useState(false);
+  const [error, setError] = useState(null);
 
   // Estados para gestión de usuarios
   const [showForm, setShowForm] = useState(false);
@@ -33,6 +30,11 @@ const Usuarios = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
   const [formErrors, setFormErrors] = useState({});
+  const [filteredUsers, setFilteredUsers] = useState([]);
+
+  // Obtener datos del usuario
+  const nombre = localStorage.getItem("nombre");
+  const userRole = localStorage.getItem("rol") || "";
 
   // Estado para el formulario
   const [formData, setFormData] = useState({
@@ -109,11 +111,39 @@ const Usuarios = () => {
     validateField(name, value);
   };
 
+  useEffect(() => {
+
+    const applyFilters = () => {
+      let result = [...users];
+
+      // Filtro principal (superior)
+      if (searchField && searchTerm) {
+        result = result.filter((user) => {
+          const value = user[searchField];
+          return value && value.toString().toLowerCase().includes(searchTerm.toLowerCase());
+        });
+      }
+
+      // Filtros adicionales
+      additionalFilters.forEach((filter) => {
+        if (filter.field && filter.value) {
+          result = result.filter((user) => {
+            const value = user[filter.field];
+            return value && value.toString().toLowerCase().includes(filter.value.toLowerCase());
+          });
+        }
+      });
+
+      setFilteredUsers(result);
+    };
+
+    applyFilters();
+  }, [searchField, searchTerm, additionalFilters, users]);
+
   // Cargar usuarios al montar el componente
   useEffect(() => {
     fetchUsers();
-  }, []);
-
+  }, []) // Solo al montar el componente
   // Función para obtener usuarios
   const fetchUsers = async () => {
     setIsLoading(true);
@@ -121,13 +151,14 @@ const Usuarios = () => {
       const response = await axios.get("http://localhost:5000/usuarios/obtener");
       const data = response.data;
       setUsers(data); // directamente, porque es un array
+      setFilteredUsers(data);
     } catch (error) {
       console.error("Error al cargar usuarios:", error);
     } finally {
       setIsLoading(false);
     }
   };
-
+  console.log(users[0]);
   // Preparar formulario para edición
   const handleEdit = (user) => {
     setEditingUser(user.id_usuario);
@@ -145,6 +176,23 @@ const Usuarios = () => {
     setShowForm(true);
   };
 
+  const handleDelete = async (id_usuario) => {
+    if (!window.confirm("¿Estás seguro de que deseas eliminar este usuario?")) return;
+
+    try {
+      const response = await axios.delete(`http://localhost:5000/usuarios/eliminar/${id_usuario}`);
+
+      if (response.data.success) {
+        alert("Usuario eliminado correctamente");
+        fetchUsers(); // recarga los usuarios
+      } else {
+        alert("Error al eliminar el usuario");
+      }
+    } catch (error) {
+      console.error("Error al eliminar:", error);
+      alert("Ocurrió un error al intentar eliminar el usuario.");
+    }
+  };
   // Manejar envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -215,34 +263,36 @@ const Usuarios = () => {
   };
 
   // Manejar búsqueda de usuarios
-  const handleSearch = async (e) => {
+  /*const handleSearch = (e) => {
     e.preventDefault();
-    setIsLoading(true);
-    try {
-      let url = 'http://localhost:5000/api/usuarios/search?';
-      url += `${searchField}=${searchTerm}`;
-
-      additionalFilters.forEach(filter => {
-        if (filter.value) {
-          url += `&${filter.field}=${filter.value}`;
+  
+    // Aplica los filtros al frontend sin llamar al backend
+    const applyFilters = () => {
+      let result = [...users];
+  
+      if (searchField && searchTerm) {
+        result = result.filter((user) => {
+          const value = user[searchField];
+          return value && value.toString().toLowerCase().includes(searchTerm.toLowerCase());
+        });
+      }
+  
+      additionalFilters.forEach((filter) => {
+        if (filter.field && filter.value) {
+          result = result.filter((user) => {
+            const value = user[filter.field];
+            return value && value.toString().toLowerCase().includes(filter.value.toLowerCase());
+          });
         }
       });
+  
+      setFilteredUsers(result);
+      setCurrentPage(1); // Reinicia a la primera página
+    };
+  
+    applyFilters();
+  };*/
 
-      const response = await fetch(url);
-      const data = await response.json();
-      if (data.success) {
-        setUsers(data.users);
-        setSearchTerm(""); // Limpiar campo de búsqueda después de realizar la búsqueda
-      } else {
-        console.error('Error en búsqueda:', data.message);
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      alert('Usuario no existe');
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   // Manejar filtros adicionales
   const addFilterField = () => {
@@ -299,8 +349,9 @@ const Usuarios = () => {
   // Lógica de paginación
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = users.slice(indexOfFirstRow, indexOfLastRow);
-  const totalPages = Math.ceil(users.length / rowsPerPage);
+  const currentRows = filteredUsers.slice(indexOfFirstRow, indexOfLastRow);
+
+  const totalPages = Math.ceil(filteredUsers.length / rowsPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   const nextPage = () => currentPage < totalPages && setCurrentPage(currentPage + 1);
@@ -311,69 +362,166 @@ const Usuarios = () => {
     setCurrentPage(1);
   };
 
+  const roleToPath = {
+    usuario: '/home',
+    tecnico: '/HomeAdmiPage',
+    administrador: '/Superadmin'
+  };
+
+  const getRouteByRole = (section) => {
+    const userRole = localStorage.getItem("rol");
+
+    if (section === 'inicio') {
+      if (userRole === 'administrador') {
+        return '/Superadmin';
+      } else if (userRole === 'tecnico') {
+        return '/HomeAdmiPage';
+      } else {
+        return '/home';
+      }
+    } else if (section === 'crear-caso') {
+      if (userRole === 'administrador') {
+        return '/CrearCasoAdmin';
+      } else if (userRole === 'tecnico') {
+        return '/CrearCasoAdmin';
+      } else {
+        return '/CrearCasoUse';
+      }
+    } else if (section === 'tickets') {
+      if (userRole === 'administrador') {
+        return '/TicketsAdmin';
+      } else if (userRole === 'tecnico') {
+        return '/TicketsTecnico';
+      } else {
+        return '/Tickets';
+      }
+    } else {
+      return '/home';
+    }
+  };
+
   return (
     <div className={styles.containerPrincipal}>
       {/* Menú Vertical */}
-      <aside className={`${styles.menuVertical} ${isMenuExpanded ? styles.expanded : ""}`}
-        onMouseEnter={toggleMenu} onMouseLeave={toggleMenu}>
+      <aside
+        className={`${styles.menuVertical} ${isMenuExpanded ? styles.expanded : ""}`}
+        onMouseEnter={toggleMenu}
+        onMouseLeave={toggleMenu}
+      >
         <div className={styles.containerFluidMenu}>
           <div className={styles.logoContainer}>
             <img src={Logo} alt="Logo" />
           </div>
 
-          <button className={`${styles.menuButton} ${styles.mobileMenuButton}`}
-            type="button" onClick={toggleMobileMenu}>
+          <button
+            className={`${styles.menuButton} ${styles.mobileMenuButton}`}
+            type="button"
+            onClick={toggleMobileMenu}
+          >
             <FiAlignJustify className={styles.menuIcon} />
           </button>
 
           <div className={`${styles.menuVerticalDesplegable} ${isMobileMenuOpen ? styles.mobileMenuOpen : ''}`}>
             <ul className={styles.menuIconos}>
+              {/* Opción Inicio - visible para todos */}
               <li className={styles.iconosMenu}>
-                <Link to="/HomeAdmiPage" className={styles.linkSinSubrayado}>
+                <Link to={roleToPath[userRole] || '/home'} className={styles.linkSinSubrayado}>
                   <FcHome className={styles.menuIcon} />
                   <span className={styles.menuText}>Inicio</span>
                 </Link>
               </li>
 
-              <li className={styles.iconosMenu}>
-                <div className={styles.linkSinSubrayado} onClick={toggleSupport}>
-                  <FcAssistant className={styles.menuIcon} />
-                  <span className={styles.menuText}> Soporte</span>
-                </div>
-                <ul className={`${styles.submenu} ${isSupportOpen ? styles.showSubmenu : ''}`}>
-                  <li><Link to="/Tickets" className={styles.submenuLink}><FcAnswers className={styles.menuIcon} /><span className={styles.menuText}>Tickets</span></Link></li>
-                  <li><Link to="/CrearCasoAdmin" className={styles.submenuLink}><FcCustomerSupport className={styles.menuIcon} /><span className={styles.menuText}>Crear Caso</span></Link></li>
-                  <li><Link to="/Problemas" className={styles.submenuLink}><FcExpired className={styles.menuIcon} /><span className={styles.menuText}>Problemas</span></Link></li>
-                  <li><Link to="/Estadisticas" className={styles.submenuLink}><FcBullish className={styles.menuIcon} /><span className={styles.menuText}>Estadísticas</span></Link></li>
-                </ul>
-              </li>
+              {/* Menú Soporte - solo para técnicos */}
+              {userRole === "tecnico" && (
+                <li className={styles.iconosMenu}>
+                  <div className={styles.linkSinSubrayado} onClick={toggleSupport}>
+                    <FcAssistant className={styles.menuIcon} />
+                    <span className={styles.menuText}> Soporte</span>
+                  </div>
 
-              <li className={styles.iconosMenu}>
-                <div className={styles.linkSinSubrayado} onClick={toggleAdmin}>
-                  <FcBusinessman className={styles.menuIcon} />
-                  <span className={styles.menuText}> Administración</span>
-                </div>
-                <ul className={`${styles.submenu} ${isAdminOpen ? styles.showSubmenu : ''}`}>
-                  <li><Link to="/Usuarios" className={styles.submenuLink}><FcPortraitMode className={styles.menuIcon} /><span className={styles.menuText}> Usuarios</span></Link></li>
-                  <li><Link to="/Grupos" className={styles.submenuLink}><FcConferenceCall className={styles.menuIcon} /><span className={styles.menuText}> Grupos</span></Link></li>
-                  <li><Link to="/Entidades" className={styles.submenuLink}><FcOrganization className={styles.menuIcon} /><span className={styles.menuText}> Entidades</span></Link></li>
-                </ul>
-              </li>
+                  <ul className={`${styles.submenu} ${isSupportOpen ? styles.showSubmenu : ''}`}>
+                    <li>
+                      <Link to="/Tickets" className={styles.submenuLink}>
+                        <FcAnswers className={styles.menuIcon} />
+                        <span className={styles.menuText}>Tickets</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/CrearCasoAdmin" className={styles.submenuLink}>
+                        <FcCustomerSupport className={styles.menuIcon} />
+                        <span className={styles.menuText}>Crear Caso</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/Problemas" className={styles.submenuLink}>
+                        <FcExpired className={styles.menuIcon} />
+                        <span className={styles.menuText}>Problemas</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/Estadisticas" className={styles.submenuLink}>
+                        <FcBullish className={styles.menuIcon} />
+                        <span className={styles.menuText}>Estadísticas</span>
+                      </Link>
+                    </li>
+                  </ul>
+                </li>
+              )}
 
-              <li className={styles.iconosMenu}>
-                <div className={styles.linkSinSubrayado} onClick={toggleConfig}>
-                  <FcAutomatic className={styles.menuIcon} />
-                  <span className={styles.menuText}> Configuración</span>
-                </div>
-                <ul className={`${styles.submenu} ${isConfigOpen ? styles.showSubmenu : ''}`}>
-                  <li><Link to="/Categorias" className={styles.submenuLink}><FcGenealogy className={styles.menuIcon} /><span className={styles.menuText}>Categorias</span></Link></li>
-                </ul>
-              </li>
+              {/* Menú Administración - solo para técnicos */}
+              {userRole === "tecnico" && (
+                <li className={styles.iconosMenu}>
+                  <div className={styles.linkSinSubrayado} onClick={toggleAdmin}>
+                    <FcBusinessman className={styles.menuIcon} />
+                    <span className={styles.menuText}> Administración</span>
+                  </div>
+                  <ul className={`${styles.submenu} ${isAdminOpen ? styles.showSubmenu : ''}`}>
+                    <li>
+                      <Link to="/Usuarios" className={styles.submenuLink}>
+                        <FcPortraitMode className={styles.menuIcon} />
+                        <span className={styles.menuText}> Usuarios</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/Grupos" className={styles.submenuLink}>
+                        <FcConferenceCall className={styles.menuIcon} />
+                        <span className={styles.menuText}> Grupos</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/Entidades" className={styles.submenuLink}>
+                        <FcOrganization className={styles.menuIcon} />
+                        <span className={styles.menuText}> Entidades</span>
+                      </Link>
+                    </li>
+                  </ul>
+                </li>
+              )}
+
+              {/* Menú Configuración - solo para técnicos */}
+              {userRole === "tecnico" && (
+                <li className={styles.iconosMenu}>
+                  <div className={styles.linkSinSubrayado} onClick={toggleConfig}>
+                    <FcAutomatic className={styles.menuIcon} />
+                    <span className={styles.menuText}> Configuración</span>
+                  </div>
+                  <ul className={`${styles.submenu} ${isConfigOpen ? styles.showSubmenu : ''}`}>
+                    <li>
+                      <Link to="/Categorias" className={styles.submenuLink}>
+                        <FcGenealogy className={styles.menuIcon} />
+                        <span className={styles.menuText}>Categorias</span>
+                      </Link>
+                    </li>
+                  </ul>
+                </li>
+              )}
             </ul>
           </div>
 
-          <div className={styles.empresarialContainer}>
-            <img src={Logoempresarial} alt="Logoempresarial" />
+          <div className={styles.floatingContainer}>
+            <div className={styles.menuLogoEmpresarial}>
+              <img src={Logoempresarial} alt="Logo Empresarial" />
+            </div>
           </div>
         </div>
       </aside>
@@ -382,26 +530,40 @@ const Usuarios = () => {
       <div style={{ marginLeft: isMenuExpanded ? "200px" : "60px", transition: "margin-left 0.3s ease" }}>
         <Outlet />
       </div>
-
       {/* Header */}
       <header className={styles.containerInicio} style={{ marginLeft: isMenuExpanded ? "200px" : "60px" }}>
         <div className={styles.containerInicioImg}>
-          <Link to="/HomeAdmiPage" className={styles.linkSinSubrayado}>
-            <FcHome className={styles.menuIcon} />
+          <Link to={roleToPath[userRole] || '/home'} className={styles.linkSinSubrayado}>
             <span>Inicio</span>
           </Link>
         </div>
         <div className={styles.inputContainer}>
           <div className={styles.searchContainer}>
-            <input type="text" placeholder="Buscar" className={styles.search} />
-            <button type="submit" className={styles.buttonBuscar} title="Buscar">
+            <input
+              className={styles.search}
+              type="text"
+              placeholder="Buscar..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <button
+              className={styles.buttonBuscar}
+              title="Buscar"
+              disabled={isLoading || !searchTerm.trim()}
+            >
               <FaMagnifyingGlass className={styles.searchIcon} />
             </button>
+            {isLoading && <span className={styles.loading}>Buscando...</span>}
+            {error && <div className={styles.errorMessage}>{error}</div>}
           </div>
+
+
           <div className={styles.userContainer}>
-            <span className={styles.username}>Bienvenido, <span id="nombreusuario">{nombre}</span></span>
+            <span className={styles.username}>Bienvenido, {nombre}</span>
             <div className={styles.iconContainer}>
-              <Link to="/"><FaPowerOff className={styles.icon} /></Link>
+              <Link to="/">
+                <FaPowerOff className={styles.icon} />
+              </Link>
             </div>
           </div>
         </div>
@@ -577,11 +739,11 @@ const Usuarios = () => {
             {/* Sistema de búsqueda */}
             <div className={styles.searchSection}>
               <h2 className={styles.sectionTitle}>Buscar Usuarios</h2>
-              <form onSubmit={handleSearch} className={styles.searchForm}>
+              <form className={styles.searchForm}>
                 <div className={styles.mainSearch}>
                   <div className={styles.searchFieldGroup}>
                     <select className={styles.searchSelect} value={searchField} onChange={(e) => setSearchField(e.target.value)}>
-                      <option value="usuario">Usuario</option>
+                      <option value="nombre_usuario">Usuario</option>
                       <option value="nombres">Nombre</option>
                       <option value="apellidos">Apellidos</option>
                       <option value="correo">Correo</option>
@@ -612,8 +774,8 @@ const Usuarios = () => {
                   <div key={index} className={styles.additionalFilter}>
                     <select
                       className={styles.searchSelect}
-                      value={filter.field}
-                      onChange={(e) => handleFilterChange(index, 'field', e.target.value)}
+                      value={searchField}
+                      onChange={(e) => setSearchField(e.target.value)}
                     >
                       <option value="nombre_usuario">Usuario</option>
                       <option value="nombres">Nombre</option>
@@ -677,7 +839,10 @@ const Usuarios = () => {
                             >
                               Editar
                             </button>
-                            <button className={`${styles.actionButton} ${styles.deleteButton}`}>
+                            <button
+                              className={`${styles.actionButton} ${styles.deleteButton}`}
+                              onClick={() => handleDelete(user.id_usuario)}
+                            >
                               Eliminar
                             </button>
                           </td>
@@ -793,5 +958,7 @@ const Usuarios = () => {
     </div>
   );
 };
+
+
 
 export default Usuarios;

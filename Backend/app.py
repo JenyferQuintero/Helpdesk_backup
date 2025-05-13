@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 from routes.auth import auth_bp
 from routes.panel import panel_bp
@@ -12,3 +12,6 @@ app.register_blueprint(usuarios_bp, url_prefix="/usuarios")
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+    
+
